@@ -16,4 +16,5 @@ public class StudyMarkerDTO {
     private Long id;
     private double locationX;
     private double locationY;
+
 }

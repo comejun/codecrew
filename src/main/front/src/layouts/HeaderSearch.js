@@ -26,12 +26,25 @@ export default function HeaderSearch() {
         {/* 검색페이지 헤더 */}
         <div className="headerBackContnent">
           <div onClick={onclickBtn}>
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_ar_bk.svg"} alt="backBtn" height="36px" />
+            <img
+              src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_ar_bk.svg"}
+              alt="backBtn"
+              height="36px"
+            />
           </div>
         </div>
         <div className="headerSearchContent">
-          <input type="text" name="search" maxlength="20" placeholder="검색어를 입력해주세요." onInput={handleInput} />
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} onClick={searchBtn} />
+          <input
+            type="text"
+            name="search"
+            maxLength="20"
+            placeholder="검색어를 입력해주세요."
+            onInput={handleInput}
+          />
+          <img
+            src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"}
+            onClick={searchBtn}
+          />
         </div>
       </div>
     </header>

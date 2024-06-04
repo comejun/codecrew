@@ -28,6 +28,7 @@ public class StudyController {
         studyService.add(studyDTO);
         return Map.of("RESULT", "SUCCESS");
     }
+
     // 스터디 전부 조회
     @GetMapping("/list")
     public PageResponseDTO<StudyDTO> list(PageRequestDTO pageRequestDTO){

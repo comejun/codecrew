@@ -150,6 +150,7 @@ public class StudyServiceImpl implements StudyService {
     private StudyDTO entityToDTO(Study study){
 
         StudyDTO studyDTO = StudyDTO.builder()
+                .id(study.getId())
                 .thImg(study.getThImg())
                 .title(study.getTitle())
                 .content(study.getContent())

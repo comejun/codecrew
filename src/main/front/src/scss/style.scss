@@ -13,6 +13,10 @@ div.bodyWrap{
   padding-bottom:120px;
   min-height: 100vh;
   position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 }
 // 메인만 풀페이징
 .MainPageSet{

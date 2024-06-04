@@ -88,7 +88,19 @@ const ReadPage = () => {
           <div className="ReadImg" style={imgStudySrc !== "" ? { backgroundImage: `url(${imgStudySrc})` } : null}></div>
           <div className="ReadTitle">
             <h3>{study.title}</h3>
-            <p>{study.location}</p>
+            <p
+              onClick={() => {
+                const confirmOpen = window.confirm("카카오지도를 여시겠습니까?");
+                if (confirmOpen) {
+                  const encodedLocation = encodeURIComponent(study.location);
+                  const kakaoMapUrl = `https://map.kakao.com/?q=${encodedLocation}`;
+                  window.open(kakaoMapUrl, "_blank");
+                }
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              {study.location}
+            </p>
           </div>
 
           <div className="ReadBtn">

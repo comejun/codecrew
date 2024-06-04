@@ -84,31 +84,47 @@ const FinalKakaoMap = ({ changePopup, popupInit }) => {
       const newCluster = new kakao.maps.MarkerClusterer({
         map: map,
         averageCenter: true,
-        minLevel: 6,
+        minLevel: 7,
         disableClickZoom: true,
       });
 
       const markers = studyLocationList.map((location) => {
-        console.log("location : ", location);
+        // console.log("location : ", location);
         let popupImg = location.thImg;
         if (!location.thImg.startsWith("http")) {
           popupImg = `${host}/api/image/view/${location.thImg}`;
         }
         const popupData = {
+          id: location.id,
           thImg: popupImg,
           title: location.title,
           location: location.location,
+          content: location.content,
           memberNickname: location.memberNickname,
           memberEmail: location.memberEmail,
+          memberPhone: location.memberPhone,
           studyDate: location.studyDate,
           maxPeople: location.maxPeople,
           clickable: true,
         };
+
+        var imageSrc = "/assets/imgs/icon/ic_map.svg", // 마커이미지의 주소입니다
+          imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
+          imageOption = { offset: new kakao.maps.Point(25, 50) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOption,
+        );
+
         let marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(
             location.locationY,
             location.locationX,
           ),
+          image: markerImage,
         });
         kakao.maps.event.addListener(marker, "click", function () {
           changePopup(popupData);
@@ -153,15 +169,21 @@ const FinalKakaoMap = ({ changePopup, popupInit }) => {
 
   return (
     <>
-      <div id="map" style={{ width: "100%", height: "calc(100vh - 52px)" }}>
+      <div
+        id="map"
+        style={{
+          width: "100%",
+          height: "calc(100vh - 52px)",
+          position: "relative",
+        }}
+      >
         {/*내위치 이동 버튼*/}
         <div
           onClick={moveToMyLocation}
           style={{
-            position: "fixed",
-            top: "20%",
-            left: "30%",
-            transform: "translate(-50%, -50%)",
+            position: "absolute",
+            top: "62px",
+            right: "16px",
             zIndex: 10,
             cursor: "pointer",
           }}
