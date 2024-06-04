@@ -10,6 +10,7 @@ import useMemberProfile from "../../hooks/useMemberProfile";
 import useCategories from "../../hooks/useCategories";
 import useProfileImage from "../../hooks/useProfileImage";
 import useCharacterCheck from "../../hooks/useCharactercheck";
+import Modal from "../../components/common/Modal";
 
 const host = API_SERVER_HOST;
 
@@ -24,6 +25,10 @@ const ModifyPage = () => {
   const [member, setMember] = useState({});
   const memberProfile = useMemberProfile(userEmail).member;
   const memberProfileImg = useMemberProfile(userEmail).imgSrc;
+
+  // 모달창 위한 state 생성
+  const [result, setResult] = useState(null);
+
   useEffect(() => {
     setMember(memberProfile);
   }, [memberProfile]);
@@ -111,101 +116,112 @@ const ModifyPage = () => {
     try {
       const res = await modifyMember(member);
       console.log(res);
+      setResult("수정 완료");
     } catch (err) {
       exceptionHandle(err);
     }
+    // moveToMypage();
+  };
+
+  const closeModal = () => {
+    setResult(null);
     moveToMypage();
   };
 
   return (
-    <BasicLayoutPage headerTitle="정보수정">
-      <form>
-        <div className="MyModifyWrap">
-          <div
-            className="MyModifyImg"
-            style={
-              member.profileImg !== ""
-                ? { backgroundImage: `url(${imgSrc})` }
-                : null
-            }
-          >
-            <label htmlFor="fileInput">
-              편집
-              <input id="fileInput" type="file" onChange={handleFileChange} />
-            </label>
-          </div>
-          <div>
-            <h3>닉네임</h3>
-            <input
-              type="text"
-              name="nickname"
-              value={member.nickname}
-              onKeyUp={checkSpecialCharacters}
-              onKeyDown={checkSpecialCharacters}
-              onChange={handleChange}
-              placeholder="닉네임을 입력해주세요."
-            />
-          </div>
-          <div>
-            <h3>관심스택</h3>
-            <div className="checkboxWrap">
-              {Object.entries(categories).length > 0 &&
-                Object.entries(categories).map(([key, value], index) => (
-                  <React.Fragment key={index}>
-                    <input
-                      onChange={handleCheckChange}
-                      id={key}
-                      type="checkbox"
-                      checked={member.favoriteList.includes(key)}
-                    />
-                    <label htmlFor={key}>{value}</label>
-                  </React.Fragment>
-                ))}
+    <>
+      {result && (
+        <Modal title={"회원정보"} content={result} callbackFn={closeModal} />
+      )}
+      <BasicLayoutPage headerTitle="정보수정">
+        <form>
+          <div className="MyModifyWrap">
+            <div
+              className="MyModifyImg"
+              style={
+                member.profileImg !== ""
+                  ? { backgroundImage: `url(${imgSrc})` }
+                  : null
+              }
+            >
+              <label htmlFor="fileInput">
+                편집
+                <input id="fileInput" type="file" onChange={handleFileChange} />
+              </label>
+            </div>
+            <div>
+              <h3>닉네임</h3>
+              <input
+                type="text"
+                name="nickname"
+                value={member.nickname}
+                onKeyUp={checkSpecialCharacters}
+                onKeyDown={checkSpecialCharacters}
+                onChange={handleChange}
+                placeholder="닉네임을 입력해주세요."
+              />
+            </div>
+            <div>
+              <h3>관심스택</h3>
+              <div className="checkboxWrap">
+                {Object.entries(categories).length > 0 &&
+                  Object.entries(categories).map(([key, value], index) => (
+                    <React.Fragment key={index}>
+                      <input
+                        onChange={handleCheckChange}
+                        id={key}
+                        type="checkbox"
+                        checked={member.favoriteList.includes(key)}
+                      />
+                      <label htmlFor={key}>{value}</label>
+                    </React.Fragment>
+                  ))}
+              </div>
+            </div>
+            <div>
+              {/*TODO 연락처 중복 방지 기능 추가*/}
+              <h3>연락처</h3>
+              <input
+                type="text"
+                placeholder="연락처를 입력해주세요."
+                maxLength={11}
+                name="phone"
+                value={member.phone}
+                onKeyUp={checkNumericInput}
+                onKeyDown={checkNumericInput}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <h3>링크</h3>
+              <input
+                type="text"
+                name="memberLink"
+                value={member.memberLink}
+                onChange={handleChange}
+                placeholder="링크를 입력해주세요."
+              />
+            </div>
+            <div>
+              <h3>사용자 소개</h3>
+              <textarea
+                placeholder="사용자소개를 입력해주세요."
+                name="introduction"
+                value={member.introduction}
+                onChange={handleChange}
+                onKeyUp={checkSpecialCharacters}
+                onKeyDown={checkSpecialCharacters}
+              ></textarea>
             </div>
           </div>
-          <div>
-            {/*TODO 연락처 중복 방지 기능 추가*/}
-            <h3>연락처</h3>
-            <input
-              type="text"
-              placeholder="연락처를 입력해주세요."
-              maxLength={11}
-              name="phone"
-              value={member.phone}
-              onKeyUp={checkNumericInput}
-              onKeyDown={checkNumericInput}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <h3>링크</h3>
-            <input
-              type="text"
-              name="memberLink"
-              value={member.memberLink}
-              onChange={handleChange}
-              placeholder="링크를 입력해주세요."
-            />
-          </div>
-          <div>
-            <h3>사용자 소개</h3>
-            <textarea
-              placeholder="사용자소개를 입력해주세요."
-              name="introduction"
-              value={member.introduction}
-              onChange={handleChange}
-              onKeyUp={checkSpecialCharacters}
-              onKeyDown={checkSpecialCharacters}
-            ></textarea>
-          </div>
+        </form>
+        <div className="MyModifyBtn">
+          <button onClick={handleClickModify} className="btnLargePoint">
+            저장
+          </button>
         </div>
-      </form>
-      <div className="MyModifyBtn">
-        <button onClick={handleClickModify} className="btnLargePoint">
-          저장
-        </button>
-      </div>
-    </BasicLayoutPage>
+      </BasicLayoutPage>
+    </>
   );
 };
 

@@ -23,4 +23,5 @@ const LoginPage = () => {
     </BasicLayoutLogin>
   );
 };
+
 export default LoginPage;

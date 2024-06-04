@@ -85,4 +85,9 @@ public class Study {
 
 
 
+    // Constructor
+    public Study(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 }

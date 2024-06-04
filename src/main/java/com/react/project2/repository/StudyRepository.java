@@ -12,9 +12,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface StudyRepository extends JpaRepository<Study, Long> {
 
     // 현재 날짜보다 Deadline이 더 늦고 isConfirmed이 false인 스터디 카테고리별 조회
@@ -43,5 +45,9 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     // 마이페이지 요청
     @Query("SELECT COUNT(s) FROM Study s WHERE s.member.email = :email")
     int countStudy(String email);
+
+    // 검색 기능 구현 위한 코드
+    List<Study> findByTitleContainingIgnoreCase(String title);
+
 
 }

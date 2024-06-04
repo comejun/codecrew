@@ -1,4 +1,5 @@
 import React from "react";
+import BasicLayout from "../../layouts/BasicLayout";
 
 const LoadingPage = () => {
   const outerStyle = {
@@ -27,7 +28,11 @@ const LoadingPage = () => {
       <div style={innerStyle}>
         <h4>로딩 중..</h4>
         {/*TODO 로딩 이미지 변경 */}
-        <img style={imageStyle} src={process.env.PUBLIC_URL + "/assets/imgs/spinner.gif"} alt="loading" />
+        <img
+          style={imageStyle}
+          src={process.env.PUBLIC_URL + "/assets/imgs/spinner.gif"}
+          alt="loading"
+        />
       </div>
     </div>
   );
