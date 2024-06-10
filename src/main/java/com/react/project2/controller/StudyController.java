@@ -15,11 +15,23 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@RequestMapping("api/study")
+@RequestMapping("/api/study")
 @RequiredArgsConstructor
 public class StudyController {
     private final StudyService studyService;
     private final StudyRepository studyRepository;
+
+
+    // 스터디 목록 조회
+    @GetMapping("/list/{email}")
+    public PageResponseDTO<StudyDTO> listMember(
+            PageRequestDTO pageRequestDTO,
+            @PathVariable("email") String memberEmail) {
+        log.info("******* StudyController - list/email : {}", memberEmail);
+        log.info("******* StudyController - list/email pageRequestDTO : {}", pageRequestDTO);
+        // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
+        return studyService.getListMember(pageRequestDTO, memberEmail);
+    }
 
     // 스터디 등록
     @PostMapping("/")
@@ -43,6 +55,7 @@ public class StudyController {
         log.info("----GETSTUDYID----");
         return studyDTO;
     }
+
 
     // 스터디 수정
     @PutMapping("/modify/{id}")

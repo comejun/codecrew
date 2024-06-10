@@ -16,17 +16,6 @@ public class Project2Application {
         SpringApplication.run(Project2Application.class, args);
     }
 
-    @Bean
-    CommandLineRunner initDatabase(StudyRepository studyRepository) {
-        return args -> {
-            studyRepository.saveAll(Arrays.asList(
-                    new Study(1L, "Study A"),
-                    new Study(2L, "Study B"),
-                    new Study(3L, "Study C"),
-                    new Study(4L, "Study D"),
-                    new Study(5L, "Study E")
-            ));
-        };
-    }
+
 
 }

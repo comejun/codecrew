@@ -49,4 +49,25 @@ public class StudyDTO {
         this.studyDate = LocalDateTime.parse(strStudyDate, formatter);
     }
 
+    public static StudyDTO convert(Study study) {
+
+        StudyDTO studyDTO = StudyDTO.builder()
+                .id(study.getId())
+                .thImg(study.getThImg())
+                .title(study.getTitle())
+                .content(study.getContent())
+                .memberEmail(study.getMember().getEmail()) // 조회된 Member 엔티티를 사용합니다.
+                .memberNickname(study.getMember().getNickname()) // 조회된 Member 엔티티를 사용합니다.
+                .memberPhone(study.getMember().getPhone()) // 조회된 Member 엔티티를 사용합니다.
+                .location(study.getLocation())
+                .studyDeadlineDate(study.getStudyDate())
+                .locationX((Double) study.getLocationX())
+                .locationY((Double) study.getLocationY())
+                .studyDate(study.getStudyDate())
+                .maxPeople(study.getMaxPeople())
+                .category(study.getCategory())
+                .build();
+        return studyDTO;
+    }
+
 }

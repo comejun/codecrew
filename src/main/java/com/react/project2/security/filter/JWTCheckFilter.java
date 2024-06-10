@@ -52,7 +52,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
         // 스터디 상세 불러오기 경로 요청은 체크 하지 않음
-        if (requestURI.matches("/api/study/\\d+")) {
+        if (requestURI.matches("/api/study")) {
             return true;
         }
         return false;

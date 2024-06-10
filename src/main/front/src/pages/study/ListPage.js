@@ -14,12 +14,12 @@ const ListPage = () => {
   // 셀렉터로 카테고리 필터링 데이터 가져오기
   const categoryFilter = useSelector((state) => state.categorySlice.category);
   const studyLocationList = useSelector(
-    (state) => state.categorySlice.studyLocationList,
+    (state) => state.categorySlice.studyLocationList
   );
   const myLocation = useSelector((state) => state.categorySlice.myLocation);
   const dispatch = useDispatch();
   const stduyLocationList = useSelector(
-    (state) => state.categorySlice.studyLocationList,
+    (state) => state.categorySlice.studyLocationList
   );
   // 카테고리 필터링데이터 가져오기
   useEffect(() => {

@@ -82,12 +82,4 @@ public class Study {
         this.disabled = disabled;
     }
 
-
-
-
-    // Constructor
-    public Study(Long id, String title) {
-        this.id = id;
-        this.title = title;
-    }
 }

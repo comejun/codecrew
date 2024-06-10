@@ -4,8 +4,12 @@ import LoadingPage from "../components/common/LoadingPage";
 const Mypage = lazy(() => import("../pages/mypage/ReadPage"));
 const ModifyPage = lazy(() => import("../pages/mypage/ModifyPage"));
 const AlarmPage = lazy(() => import("../pages/mypage/AlarmPage"));
-const MyStudyCretPagePage = lazy(() => import("../pages/mypage/MyStudyCretPage"));
-const MyStudyJoinPagePage = lazy(() => import("../pages/mypage/MyStudyJoinPage"));
+const MyStudyCretPagePage = lazy(() =>
+  import("../pages/mypage/MyStudyCretPage")
+);
+const MyStudyJoinPagePage = lazy(() =>
+  import("../pages/mypage/MyStudyJoinPage")
+);
 
 const mypageRouter = () => {
   return [

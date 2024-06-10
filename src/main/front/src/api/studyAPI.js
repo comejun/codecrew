@@ -23,11 +23,15 @@ export const getOne = async (id) => {
 // API 스터디 수정 요청
 export const modifyStudy = async (id, study) => {
   console.log(`${host}/modify/${id}`);
-  const response = await axios.put(`${host}/modify/${id}`, study);
+  const response = await jwtAxios.put(`${host}/modify/${id}`, study);
   return response.data;
 };
 
 // API 스터디 목록조회 요청
-export const getList = async (pageParam) => {
-  const { page, size } = page;
+export const getList = async (pageParam, email) => {
+  const { page, size } = pageParam;
+  const response = await jwtAxios.get(`${host}/list/${email}`, {
+    params: { page, size }, // 여기서 page와 size를 동적으로 설정
+  });
+  return response.data;
 };
