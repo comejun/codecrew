@@ -1,9 +1,11 @@
 import axios from "axios";
 import { API_SERVER_HOST } from "./memberAPI";
 
-// 카카오에서 발급 받은 내 REST API 키
+// ToDo 카카오에서 발급 받은 내 REST API 키
 const rest_api_key = `dcb40de2e6ff14c5d5862f9b01cc3b84`;
 // RedirectURI
+// const redirect_uri = `http://192.168.0.244:3000/member/kakao`;
+// const redirect_uri = `http://192.168.219.177:3000/member/kakao`;
 const redirect_uri = `http://localhost:3000/member/kakao`;
 // 카카오 인가코드 요청 경로
 const auth_code_path = `https://kauth.kakao.com/oauth/authorize`;
@@ -40,8 +42,6 @@ export const getAccessToken = async (authCode) => {
 
 // Access Token으로 API 서버 호출 함수
 export const getMemberWithAccessToken = async (accessToken) => {
-  const response = await axios.get(
-    `${API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`,
-  );
+  const response = await axios.get(`${API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`);
   return response.data;
 };

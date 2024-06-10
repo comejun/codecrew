@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { API_SERVER_HOST, getOne } from "../api/studyAPI";
+import { getOne } from "../api/studyAPI";
 import { useNavigate } from "react-router-dom";
+import { API_SERVER_HOST } from "../api/memberAPI";
 
 const useStudyData = (id) => {
   // 스터디 저장값 초기화

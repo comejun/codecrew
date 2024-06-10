@@ -19,13 +19,17 @@ import java.util.List;
 @Repository
 public interface StudyRepository extends JpaRepository<Study, Long> {
 
-    // 현재 날짜보다 Deadline이 더 늦고 isConfirmed이 false인 스터디 카테고리별 조회
-    @Query("select s from Study s where s.studyDeadlineDate > current_date and s.isConfirmed = false and s.category = :category")
+
+    // 현재 날짜보다 Deadline이 더 늦고 isConfirmed이 false이며 disabled가 false인 스터디 카테고리별 조회
+    @Query("select s from Study s where s.studyDeadlineDate > current_date and s.isConfirmed = false and s.disabled = false and s.category = :category")
     List<Study> findAllByCategory(Category category);
 
     // 현재 날짜보다 Deadline이 더 늦고 isConfirmed이 false인 스터디 전체 조회
-    @Query("select s from Study s where s.studyDeadlineDate > current_date and s.isConfirmed = false")
+    @Query("select s from Study s where s.studyDeadlineDate > current_date and s.isConfirmed = false and s.disabled = false")
     List<Study> findAllCategory();
+
+
+
 
 
     // 스터디 조회

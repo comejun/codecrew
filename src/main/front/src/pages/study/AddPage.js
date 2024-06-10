@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { postAdd } from "../../api/studyAPI";
 import BasicLayoutPage from "../../layouts/BasicLayoutPage";
@@ -9,6 +9,8 @@ import useCategories from "../../hooks/useCategories";
 import useProfileImage from "../../hooks/useProfileImage";
 import useCharacterCheck from "../../hooks/useCharactercheck";
 import useCustomMove from "../../hooks/useCustomMove";
+import { useParams } from "react-router-dom";
+
 const { kakao } = window;
 
 const host = API_SERVER_HOST;
@@ -28,6 +30,40 @@ const initState = {
   studyMemberList: [],
 };
 const AddPage = () => {
+  const { lat, lng } = useParams();
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      let roadAddress = "";
+      if (lat > 0 && lng > 0) {
+        const geocoder = new kakao.maps.services.Geocoder();
+        const result = await new Promise((resolve, reject) => {
+          geocoder.coord2Address(lng, lat, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result);
+              if (result[0].road_address === null) {
+                roadAddress = result[0].address.address_name;
+              } else {
+                roadAddress = result[0].road_address.address_name;
+              }
+              setStudy((prevStudy) => ({
+                ...prevStudy,
+                location: roadAddress,
+                locationX: lat,
+                locationY: lng,
+              }));
+              resolve(result);
+            } else {
+              reject(status);
+            }
+          });
+        });
+      }
+    };
+
+    fetchAddress();
+  }, []);
+
   // 전체 관심스택 가져오기
   const categories = useCategories(host);
   // 현재 로그인 된 회원의 이메일 가져오기
@@ -159,6 +195,24 @@ const AddPage = () => {
       moveToMain();
     });
   };
+  const [titleLength, setTitleLength] = useState(0);
+  const [contentLength, setContentLength] = useState(0);
+
+  const handleTitleChange = (e) => {
+    const inputLenght = e.target.value.length;
+    if (inputLenght <= 24) {
+      handleChangeStudy(e);
+      setTitleLength(inputLenght);
+    }
+  };
+
+  const handleContentChange = (e) => {
+    const inputLenght = e.target.value.length;
+    if (inputLenght <= 200) {
+      handleChangeStudy(e);
+      setContentLength(inputLenght);
+    }
+  };
 
   return (
     <>
@@ -202,14 +256,19 @@ const AddPage = () => {
               <input
                 name="title"
                 value={study.title}
+                maxLength={24}
                 type="text"
                 placeholder="스터디명을 입력해주세요."
                 onKeyUp={checkSpecialCharacters}
                 onKeyDown={checkSpecialCharacters}
-                onChange={handleChangeStudy}
+                onChange={handleTitleChange}
               />
+              <span style={{ color: "#dcdcdc", fontSize: "12px", textAlign: "right", display: "block" }}>{titleLength} / 24</span>
             </div>
-            <div onClick={handleAddressSearchClick}>
+            <div
+              // onClick={handleAddressSearchClick}
+              onClick={lat ? () => {} : handleAddressSearchClick}
+            >
               <h3>주소</h3>
               <input name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
 
@@ -256,11 +315,13 @@ const AddPage = () => {
               <textarea
                 name="content"
                 value={study.content}
+                maxLength={200}
                 placeholder="스터디소개를 입력해주세요."
-                onChange={handleChangeStudy}
+                onChange={handleContentChange}
                 onKeyUp={checkSpecialCharacters}
                 onKeyDown={checkSpecialCharacters}
               ></textarea>
+              <span style={{ color: "#dcdcdc", fontSize: "12px", textAlign: "right", display: "block" }}>{contentLength} / 200</span>
             </div>
           </div>
           <div className="bottomBtnWrap">

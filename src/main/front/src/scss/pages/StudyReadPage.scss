@@ -1,4 +1,7 @@
 /* Study Read Page */
+div.bodyWrap{
+  background-color: #fff;
+}
 div.ReadContent{
   width: 100%;
   margin-top: 24px;
@@ -24,7 +27,7 @@ div.ReadTitle{
   text-align: left;
   margin-top: 8px;
   h3{
-    font-weight: 500;
+    font-weight: 600;
     font-size: 18px;
   }
   p{
@@ -43,7 +46,7 @@ div.ReadBtn{
 }
 
 div.ReadTextWrap{
-  background-color: #F8F9FA;
+  background-color: #FCFCFC;
   padding: 22px 0px;
 }
 div.ReadText{
@@ -94,6 +97,23 @@ div.ReadStudyUser{
     line-height: 32px;
     margin: 0;
     border-bottom: 0.5px solid #dcdcdc;
+  }
+}
+div.ReadUserCheck{
+  width: 100%;
+  height: 32px;
+  display: block;
+  position: relative;
+  h2{
+    width: 100%;
+    height:32px;
+    line-height: 32px;
+  }
+  p{
+    display: block;
+    position: absolute;
+    top:-6px;
+    right: calc(-100% + 30px);
   }
 }
 

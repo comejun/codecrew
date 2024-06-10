@@ -34,10 +34,7 @@ const ModifyPage = () => {
   }, [memberProfile]);
 
   // 사진 수정용 CustomHook 사용하기
-  const { imgSrc, handleFileChange, saveFile } = useProfileImage(
-    memberProfileImg,
-    memberProfile.profileImg,
-  );
+  const { imgSrc, handleFileChange, saveFile } = useProfileImage(memberProfileImg, memberProfile.profileImg);
 
   // 전체 관심스택 가져오기
   const categories = useCategories(host);
@@ -108,7 +105,6 @@ const ModifyPage = () => {
 
   // 입력값 예외 처리후 실제 회원 정보 실제 저장 하는 함수
   const saveModify = async () => {
-    // TODO 분기 처리
     if (!imgSrc.includes(member.profileImg)) {
       member.profileImg = await saveFile();
     }
@@ -128,99 +124,107 @@ const ModifyPage = () => {
     moveToMypage();
   };
 
+  // 사용자 소개 글자 수 상태
+  const [nicknameLength, setNicknameLength] = useState(0);
+  const [introductionLength, setIntroductionLength] = useState(0);
+
+  // 닉네임 변경 핸들러
+  const handleNicknameChange = (e) => {
+    const inputLength = e.target.value.length;
+    if (inputLength <= 20) {
+      handleChange(e); // 원래의 handleChange 함수 호출
+      setNicknameLength(inputLength); // 글자 수 상태 업데이트
+    }
+  };
+
+  // 사용자 소개 변경 핸들러
+  const handleIntroductionChange = (e) => {
+    const inputLength = e.target.value.length;
+    if (inputLength <= 2000) {
+      handleChange(e); // 원래의 handleChange 함수 호출
+      setIntroductionLength(inputLength); // 글자 수 상태 업데이트
+    }
+  };
+
   return (
-    <>
-      {result && (
-        <Modal title={"회원정보"} content={result} callbackFn={closeModal} />
-      )}
-      <BasicLayoutPage headerTitle="정보수정">
-        <form>
-          <div className="MyModifyWrap">
-            <div
-              className="MyModifyImg"
-              style={
-                member.profileImg !== ""
-                  ? { backgroundImage: `url(${imgSrc})` }
-                  : null
-              }
-            >
-              <label htmlFor="fileInput">
-                편집
-                <input id="fileInput" type="file" onChange={handleFileChange} />
-              </label>
-            </div>
-            <div>
-              <h3>닉네임</h3>
-              <input
-                type="text"
-                name="nickname"
-                value={member.nickname}
-                onKeyUp={checkSpecialCharacters}
-                onKeyDown={checkSpecialCharacters}
-                onChange={handleChange}
-                placeholder="닉네임을 입력해주세요."
-              />
-            </div>
-            <div>
-              <h3>관심스택</h3>
-              <div className="checkboxWrap">
-                {Object.entries(categories).length > 0 &&
-                  Object.entries(categories).map(([key, value], index) => (
-                    <React.Fragment key={index}>
-                      <input
-                        onChange={handleCheckChange}
-                        id={key}
-                        type="checkbox"
-                        checked={member.favoriteList.includes(key)}
-                      />
-                      <label htmlFor={key}>{value}</label>
-                    </React.Fragment>
-                  ))}
-              </div>
-            </div>
-            <div>
-              {/*TODO 연락처 중복 방지 기능 추가*/}
-              <h3>연락처</h3>
-              <input
-                type="text"
-                placeholder="연락처를 입력해주세요."
-                maxLength={11}
-                name="phone"
-                value={member.phone}
-                onKeyUp={checkNumericInput}
-                onKeyDown={checkNumericInput}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <h3>링크</h3>
-              <input
-                type="text"
-                name="memberLink"
-                value={member.memberLink}
-                onChange={handleChange}
-                placeholder="링크를 입력해주세요."
-              />
-            </div>
-            <div>
-              <h3>사용자 소개</h3>
-              <textarea
-                placeholder="사용자소개를 입력해주세요."
-                name="introduction"
-                value={member.introduction}
-                onChange={handleChange}
-                onKeyUp={checkSpecialCharacters}
-                onKeyDown={checkSpecialCharacters}
-              ></textarea>
+  <>
+        {result && (
+          <Modal title={"회원정보"} content={result} callbackFn={closeModal} />
+        )}
+    <BasicLayoutPage headerTitle="정보수정">
+      <form>
+        <div className="MyModifyWrap">
+          <div className="MyModifyImg" style={member.profileImg !== "" ? { backgroundImage: `url(${imgSrc})` } : null}>
+            <label htmlFor="fileInput">
+              편집
+              <input id="fileInput" type="file" onChange={handleFileChange} />
+            </label>
+          </div>
+          <div>
+            <h3>닉네임</h3>
+            <input
+              type="text"
+              name="nickname"
+              maxLength={20}
+              value={member.nickname}
+              onKeyUp={checkSpecialCharacters}
+              onKeyDown={checkSpecialCharacters}
+              onChange={handleNicknameChange}
+              placeholder="닉네임을 입력해주세요."
+            />
+            <span style={{ color: "#dcdcdc", fontSize: "12px", textAlign: "right", display: "block" }}>{nicknameLength} / 20</span>
+          </div>
+          <div>
+            <h3>관심스택</h3>
+            <div className="checkboxWrap">
+              {Object.entries(categories).length > 0 &&
+                Object.entries(categories).map(([key, value], index) => (
+                  <React.Fragment key={index}>
+                    <input onChange={handleCheckChange} id={key} type="checkbox" checked={member.favoriteList.includes(key)} />
+                    <label htmlFor={key}>{value}</label>
+                  </React.Fragment>
+                ))}
             </div>
           </div>
-        </form>
-        <div className="MyModifyBtn">
-          <button onClick={handleClickModify} className="btnLargePoint">
-            저장
-          </button>
+          <div>
+            {/*TODO 연락처 중복 방지 기능 추가*/}
+            <h3>연락처</h3>
+            <input
+              type="text"
+              placeholder="입력예시 : 01098761234"
+              maxLength={11}
+              name="phone"
+              value={member.phone}
+              onKeyUp={checkNumericInput}
+              onKeyDown={checkNumericInput}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <h3>링크</h3>
+            <input type="text" name="memberLink" value={member.memberLink} onChange={handleChange} placeholder="입력예시 : www.example.com" />
+          </div>
+          <div>
+            <h3>사용자 소개</h3>
+            <textarea
+              placeholder="사용자소개를 입력해주세요."
+              name="introduction"
+              value={member.introduction}
+              maxLength={200}
+              onChange={handleIntroductionChange}
+              onKeyUp={checkSpecialCharacters}
+              onKeyDown={checkSpecialCharacters}
+            ></textarea>
+            <span style={{ color: "#dcdcdc", fontSize: "12px", textAlign: "right", display: "block" }}>{introductionLength} / 200</span>
+          </div>
         </div>
-      </BasicLayoutPage>
+      </form>
+      <div className="MyModifyBtn">
+        <button onClick={handleClickModify} className="btnLargePoint">
+          저장
+        </button>
+      </div>
+    </BasicLayoutPage>
     </>
   );
 };

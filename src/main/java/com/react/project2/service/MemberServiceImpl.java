@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
         // 기존회원 -> 로그인
         if (findMember.isPresent()) {
             log.info("기존 회원");
-            MemberDTO memberDTO = entityToDto(findMember.get());
+            MemberDTO memberDTO =entityToDto(findMember.get());
             log.info("************ MemberService - getKakaoMember -memberDTO : {}", memberDTO);
             return memberDTO;
         }

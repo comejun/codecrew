@@ -75,26 +75,97 @@ public class StudyController {
         }
     }
 
-
     // 스터디 참가신청
     @PostMapping("/{id}/participate")
     public ResponseEntity<?> participate(@PathVariable("id") Long id, @RequestBody Map<String, String> payload) {
+        String userEmail = payload.get("email");
+        if (userEmail == null || userEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "이메일이 제공되지 않았습니다."));
+        }
         try {
-            String userEmail = payload.get("email");
-            if (userEmail == null || userEmail.isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("error", "이메일이 제공되지 않았습니다."));
-            }
             // 스터디 참가 로직 구현
             boolean result = studyService.participate(id, userEmail);
+            return ResponseEntity.ok().body(Map.of("message", "스터디 참가신청이 완료되었습니다."));
+        } catch (IllegalStateException e) {
+            // 이미 참가신청을 한 경우 또는 참가인원이 최대인 경우
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            // 그 외 예외 발생 시 에러 메시지 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 참가신청 처리 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 스터디 참가 취소
+    @PostMapping("/{id}/cancelParticipation")
+    public ResponseEntity<?> participationCancel(@PathVariable("id") Long id, @RequestBody Map<String, String> payload) {
+        String userEmail = payload.get("email");
+        if (userEmail == null || userEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "이메일이 제공되지 않았습니다."));
+        }
+        try {
+            // 스터디 참가 취소 로직 구현
+            boolean result = studyService.participationCancel(id, userEmail);
             if (result) {
-                log.info("테스트-------체크");
-                return ResponseEntity.ok().body(Map.of("message", "스터디 참가신청이 완료되었습니다."));
+                return ResponseEntity.ok().body(Map.of("message", "스터디 참가 취소가 완료되었습니다."));
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 참가신청 처리 중 오류가 발생했습니다."));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "참가 취소할 스터디를 찾을 수 없습니다."));
             }
         } catch (Exception e) {
-            // 예외 발생 시 에러 메시지 반환
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 참가신청 처리 중 오류가 발생했습니다."));
+            // 그 외 예외 발생 시 에러 메시지 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 참가 취소 처리 중 오류가 발생했습니다."));
+        }
+    }
+    // 스터디 참가 수락
+    @PostMapping("/{id}/acceptJoin")
+    public ResponseEntity<?> acceptJoin(@PathVariable("id") Long id, @RequestBody Map<String, String> payload) {
+        String memberEmail = payload.get("email");
+        if (memberEmail == null || memberEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "멤버 이메일이 제공되지 않았습니다."));
+        }
+        try {
+            // 스터디 참가 거절 로직 구현
+            boolean result = studyService.acceptJoin(id, memberEmail);
+            if (result) {
+                return ResponseEntity.ok().body(Map.of("message", "스터디 멤버 참가 수락이 완료되었습니다."));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "수락할 스터디 멤버를 찾을 수 없습니다."));
+            }
+        } catch (Exception e) {
+            // 그 외 예외 발생 시 에러 메시지 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 멤버 참가 수락 처리 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 스터디 참가 거절
+    @PostMapping("/{id}/declineJoin")
+    public ResponseEntity<?> declineJoin(@PathVariable("id") Long id, @RequestBody Map<String, String> payload) {
+        String memberEmail = payload.get("email");
+        if (memberEmail == null || memberEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "멤버 이메일이 제공되지 않았습니다."));
+        }
+        try {
+            // 스터디 참가 거절 로직 구현
+            boolean result = studyService.declineJoin(id, memberEmail);
+            if (result) {
+                return ResponseEntity.ok().body(Map.of("message", "스터디 멤버 참가 거절이 완료되었습니다."));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "거절할 스터디 멤버를 찾을 수 없습니다."));
+            }
+        } catch (Exception e) {
+            // 그 외 예외 발생 시 에러 메시지 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 멤버 참가 거절 처리 중 오류가 발생했습니다."));
+        }
+    }
+
+
+    // 스터디 시작
+    @PutMapping("/{id}/start")
+    public ResponseEntity<?> startStudy(@PathVariable("id") Long id) {
+        boolean result = studyService.startStudy(id);
+        if (result){
+            return ResponseEntity.ok().body(Map.of("message", "스터디가 성공적으로 시작되었습니다."));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 시작 처리 중 오류가 발생했습니다."));
         }
     }
 

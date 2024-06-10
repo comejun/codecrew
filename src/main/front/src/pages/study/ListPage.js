@@ -34,10 +34,7 @@ const ListPage = () => {
   useEffect(() => {
     console.log("위치정보 받아오기");
 
-    dispatch(setMyLocation()).then(() => {
-      // console.log("거리순 정렬");
-      // dispatch(sortStudyLocationList());
-    });
+    dispatch(setMyLocation()).then(() => {});
   }, [dispatch]);
 
   // studyLocationList가 변경되면 거리순 정렬

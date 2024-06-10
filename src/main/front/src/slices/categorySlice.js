@@ -76,6 +76,14 @@ const categorySlice = createSlice({
         return distanceA - distanceB;
       });
     },
+    // 검색어에 따라 필터링하는 액션 추가
+    filterStudyLocationList: (state, action) => {
+      state.studyLocationList = state.studyLocationList.filter(
+        (studyLocation) => {
+          return studyLocation.title.includes(action.payload);
+        },
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -99,5 +107,6 @@ const categorySlice = createSlice({
   },
 });
 
-export const { setCategory, sortStudyLocationList } = categorySlice.actions;
+export const { setCategory, sortStudyLocationList, filterStudyLocationList } =
+  categorySlice.actions;
 export default categorySlice.reducer;
