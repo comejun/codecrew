@@ -57,7 +57,7 @@ class StudyRepositoryTest {
 
     @Test
     public void testInsert() {
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 2; i++) {
 
             // 37.57163048751097, 126.9768859784546
 

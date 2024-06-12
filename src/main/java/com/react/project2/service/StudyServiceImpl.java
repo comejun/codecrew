@@ -82,6 +82,11 @@ public class StudyServiceImpl implements StudyService {
                 .build();
     }
 
+    // 스터디 참가자 조회
+    public List<StudyMember> getJoinStudy(String email) {
+        return studyRepository.getJoinStudy(email);
+    }
+
 
 // 스터디 조회
 @Override

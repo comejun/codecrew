@@ -2,6 +2,7 @@ package com.react.project2.repository;
 
 import com.react.project2.domain.Category;
 import com.react.project2.domain.Study;
+import com.react.project2.domain.StudyMember;
 import jakarta.persistence.Entity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,9 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     // 검색 기능 구현 위한 코드
     List<Study> findByTitleContainingIgnoreCase(String title);
+    // 참가 스터디 목록 가져오기
+    @Query("SELECT members FROM Study s JOIN s.studyMemberList members WHERE members.email = :email AND members.status IN ('HOLD', 'ACCEPT', 'ARRIVE', 'ABSENCE') AND s.disabled = false")
+    List<StudyMember> getJoinStudy(@Param("email") String email);
 
 
 }

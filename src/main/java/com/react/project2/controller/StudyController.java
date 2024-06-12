@@ -2,6 +2,9 @@ package com.react.project2.controller;
 
 import com.react.project2.domain.MemberStatus;
 import com.react.project2.domain.NoticeType;
+import com.react.project2.domain.StudyMember;
+import com.react.project2.dto.PageRequestDTO;
+import com.react.project2.dto.PageResponseDTO;
 import com.react.project2.dto.StudyDTO;
 import com.react.project2.service.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,15 +34,23 @@ public class StudyController {
         // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
         return studyService.getListMember(pageRequestDTO, memberEmail);
     }
-//    // 스터디 멤버 목록 조회
-//    @GetMapping("/memberList/{email}")
-//    public PageResponseDTO<StudyDTO> memberList(
-//            PageRequestDTO pageRequestDTO,
-//            @PathVariable("email") String memberEmail) {
-//        log.info("******* StudyController - list/email : {}", memberEmail);
-//        log.info("******* StudyController - list/email pageRequestDTO : {}", pageRequestDTO);
-//        // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
-//        return studyService.getListMember(pageRequestDTO, memberEmail);
+    // 스터디 멤버 목록 조회
+    @GetMapping("/memberList/{email}")
+    public List<StudyMember> getJoinedStudies(@PathVariable String email) {
+        return studyService.getJoinStudy(email);
+    }
+
+    // 마이페이지 요청
+//    @GetMapping("/countmy")
+//    public ResponseEntity<?> countMyStudies(@RequestParam String email) {
+//        try {
+//            // 사용자 이메일로 스터디 개수 조회
+//            int count = studyRepository.countStudy(email);
+//            return ResponseEntity.ok().body(Map.of("count", count));
+//        } catch (Exception e) {
+//            // 예외 발생 시 에러 메시지 반환
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "스터디 개수를 조회하는 중 오류가 발생했습니다."));
+//        }
 //    }
 
 
