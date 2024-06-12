@@ -39,7 +39,7 @@ const useHandleStudyMember = () => {
     confirmAction("스터디 참가신청을 하시겠습니까?", () =>
       jwtAxios.post(`${host}/api/study/${studyId}/participate`, {
         email: userEmail,
-      }),
+      })
     );
 
   // 스터디 참가 취소 처리 함수
@@ -47,7 +47,15 @@ const useHandleStudyMember = () => {
     confirmAction("스터디 참가를 취소하시겠습니까?", () =>
       jwtAxios.post(`${host}/api/study/${studyId}/cancelParticipation`, {
         email: userEmail,
-      }),
+      })
+    );
+
+  // 스터디 출석 체크 함수
+  const handleArrive = (studyId) =>
+    confirmAction("스터디 출석체크를 하시겠습니까?", () =>
+      jwtAxios.post(`${host}/api/study/${studyId}/arrive`, {
+        email: userEmail,
+      })
     );
 
   // 스터디 참가 수락 처리 함수
@@ -55,7 +63,7 @@ const useHandleStudyMember = () => {
     confirmAction(`"${memberEmail}"님의 참가를 수락하시겠습니까?`, () =>
       jwtAxios.post(`${host}/api/study/${studyId}/acceptJoin`, {
         email: memberEmail,
-      }),
+      })
     );
 
   // 스터디 참가 거절 처리 함수
@@ -63,13 +71,14 @@ const useHandleStudyMember = () => {
     confirmAction(`"${memberEmail}"님의 참가를 거절하시겠습니까?`, () =>
       jwtAxios.post(`${host}/api/study/${studyId}/declineJoin`, {
         email: memberEmail,
-      }),
+      })
     );
 
   // 각 함수를 반환
   return {
     handleParticipate,
     handleParticipateCancel,
+    handleArrive,
     handleJoinAccept,
     handleJoinDecline,
   };

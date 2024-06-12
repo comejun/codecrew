@@ -87,3 +87,41 @@ div.bottomBtnWrap{
     margin-top: 32px;
   }
 }
+#studyDate::-webkit-calendar-picker-indicator {
+	background-image: url('../../../public/assets/imgs/icon/ic_de_gr.svg'); /* 사용자 정의 아이콘 */
+  background-repeat: no-repeat;
+  background-size: 0;
+  background-position: right 3px center;
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+}
+#studyDate {
+  background-image: url('../../../public/assets/imgs/icon/ic_de_gr.svg'); /* 사용자 정의 아이콘 */
+  background-repeat: no-repeat;
+  background-position: right 3px center;
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+}
+
+#maxPeople, #category {
+  -webkit-appearance: none; /* 크롬, 사파리 */
+  -moz-appearance: none;    /* 파이어폭스 */
+  appearance: none;         /* 표준 */
+  /* 사용자 정의 화살표 이미지를 배경으로 설정합니다 */
+  background-image: url('../../../public/assets/imgs/icon/ic_ar_gr.svg');
+  background-repeat: no-repeat;
+  background-position: right 3px center;
+  background-size: 2.3em; /* 화살표 크기 조정 */
+}
+
+/* IE11 및 Edge를 위한 대체 스타일 */
+#maxPeople::-ms-expand, 
+#category::-ms-expand{
+  display: none;
+}
+// input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+//   display: none;
+// }
+// select {
+//   -webkit-appearance: none; /* 크롬, 사파리 */
+//   -moz-appearance: none; /* 파이어폭스 */
+//   appearance: none; /* 표준 */
+// }

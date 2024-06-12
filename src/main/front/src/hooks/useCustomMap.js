@@ -14,9 +14,7 @@ const useCustomMap = () => {
   });
   // 셀렉터로 카테고리 가져오기
   const categoryFilter = useSelector((state) => state.categorySlice.category);
-  const studyLocationList = useSelector(
-    (state) => state.categorySlice.studyLocationList,
-  );
+  const studyLocationList = useSelector((state) => state.categorySlice.studyLocationList);
 
   // 내 위치 가져오기
   useEffect(() => {
@@ -43,15 +41,8 @@ const useCustomMap = () => {
 
   // 내 위치 마커 생성
   const myLocationMarker = () => {
-    const markerPosition = new kakao.maps.LatLng(
-      myLocation.lat,
-      myLocation.lng,
-    );
-    const markerImage = new kakao.maps.MarkerImage(
-      "assets/imgs/icon/oval.svg",
-      new kakao.maps.Size(50, 50),
-      { offset: new kakao.maps.Point(25, 25) },
-    );
+    const markerPosition = new kakao.maps.LatLng(myLocation.lat, myLocation.lng);
+    const markerImage = new kakao.maps.MarkerImage("assets/imgs/icon/oval.svg", new kakao.maps.Size(50, 50), { offset: new kakao.maps.Point(25, 25) });
     const marker = new kakao.maps.Marker({
       position: markerPosition,
       image: markerImage,
@@ -64,11 +55,7 @@ const useCustomMap = () => {
   const createMapClickMarker = (latlng) => {
     console.log("mapClickMarker latlng: ", latlng);
     const markerPosition = latlng;
-    const markerImage = new kakao.maps.MarkerImage(
-      "assets/imgs/icon/ic_map_active.svg",
-      new kakao.maps.Size(50, 50),
-      { offset: new kakao.maps.Point(25, 25) },
-    );
+    const markerImage = new kakao.maps.MarkerImage("assets/imgs/icon/ic_map_active.svg", new kakao.maps.Size(50, 50), { offset: new kakao.maps.Point(25, 25) });
     const marker = new kakao.maps.Marker({
       position: markerPosition,
       image: markerImage,
@@ -96,6 +83,7 @@ const useCustomMap = () => {
         memberPhone: location.memberPhone,
         studyDate: location.studyDate,
         maxPeople: location.maxPeople,
+        isConfirmed: location.isConfirmed,
         studyMemberList: location.studyMemberList,
         clickable: true,
       };
@@ -105,11 +93,7 @@ const useCustomMap = () => {
         imageOption = { offset: new kakao.maps.Point(25, 50) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
       // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-      var markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOption,
-      );
+      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
       let marker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(location.locationY, location.locationX),
@@ -118,25 +102,13 @@ const useCustomMap = () => {
       // 마우스 오버 이벤트 리스너 추가
       kakao.maps.event.addListener(marker, "mouseover", function () {
         // 마우스 오버 시 수행할 동작, 예를 들어 마커 이미지 변경
-        marker.setImage(
-          new kakao.maps.MarkerImage(
-            "/assets/imgs/icon/ic_map_active.svg",
-            imageSize,
-            imageOption,
-          ),
-        );
+        marker.setImage(new kakao.maps.MarkerImage("/assets/imgs/icon/ic_map_active.svg", imageSize, imageOption));
       });
 
       // 마우스 아웃 이벤트 리스너 추가
       kakao.maps.event.addListener(marker, "mouseout", function () {
         // 마우스 아웃 시 원래 이미지로 변경
-        marker.setImage(
-          new kakao.maps.MarkerImage(
-            "/assets/imgs/icon/ic_map.svg",
-            imageSize,
-            imageOption,
-          ),
-        );
+        marker.setImage(new kakao.maps.MarkerImage("/assets/imgs/icon/ic_map.svg", imageSize, imageOption));
       });
       kakao.maps.event.addListener(marker, "click", function () {
         changePopup(popupData);

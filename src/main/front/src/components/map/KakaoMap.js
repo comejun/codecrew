@@ -5,20 +5,13 @@ import useCustomMap from "../../hooks/useCustomMap";
 
 const { kakao } = window;
 
-const KakaoMap = ({ overlayState, changeOverlayState, changePopup }) => {
+const KakaoMap = ({ overlayState, changeOverlayState, changePopup, refresh }) => {
   // 셀렉터로 카테고리 가져오기
   const categoryFilter = useSelector((state) => state.categorySlice.category);
-  const studyLocationList = useSelector(
-    (state) => state.categorySlice.studyLocationList,
-  );
+  const studyLocationList = useSelector((state) => state.categorySlice.studyLocationList);
   const dispatch = useDispatch();
 
-  const {
-    myLocation,
-    myLocationMarker,
-    clustererMarkers,
-    createMapClickMarker,
-  } = useCustomMap();
+  const { myLocation, myLocationMarker, clustererMarkers, createMapClickMarker } = useCustomMap();
 
   const [nowMarker, setNowMarker] = useState(null);
   const [mapClickMarker, setMapClickMarker] = useState(null);
@@ -50,17 +43,9 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup }) => {
       // 현재 화면 height px값 가져오기
       const height = window.innerHeight;
       console.log("height : ", height);
-      //Todo 마커 움직이는 높이 조절 필요
-      // setTimeout(() => {
-      //   map.panBy(0, height / 8);
-      // }, 500); // 500ms 후에 실행
       map.setDraggable(false);
       map.setZoomable(false);
-      changeOverlayState(
-        mouseEvent.latLng.getLat(),
-        mouseEvent.latLng.getLng(),
-        true,
-      );
+      changeOverlayState(mouseEvent.latLng.getLat(), mouseEvent.latLng.getLng(), true);
       kakao.maps.event.removeListener(map, "dblclick", mapClickedFunc);
     }
   };
@@ -92,7 +77,7 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup }) => {
     dispatch(getStudyLocationList(categoryFilter)).then(() => {
       console.log("studyLocationList 가져오기");
     });
-  }, [categoryFilter]);
+  }, [categoryFilter, refresh]);
 
   // 현재위치 체크 및 studyLocationList가져오면 지도 렌더링 가능
   useEffect(() => {
@@ -109,9 +94,6 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup }) => {
       // 로그인 시에만
       if (loginState.email) {
         // 지도 더블 클릭 이벤트 등록
-        /*kakao.maps.event.addListener(map, "dblclick", function (mouseEvent) {
-            mapClickedFunc(mouseEvent);
-          });*/
         kakao.maps.event.addListener(map, "dblclick", mapClickedFunc);
       }
 
@@ -154,7 +136,7 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup }) => {
       // 클러스터가 변경된 후에 이전에 저장한 중심 좌표를 다시 지도의 중심으로 설정합니다.
       map.setCenter(currentCenter);
     }
-  }, [map, categoryFilter]);
+  }, [map, studyLocationList, categoryFilter]);
 
   // 클릭 마커 지우기
   useEffect(() => {

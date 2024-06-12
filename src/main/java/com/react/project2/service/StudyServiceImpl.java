@@ -1,9 +1,6 @@
 package com.react.project2.service;
 
-import com.react.project2.domain.Category;
-import com.react.project2.domain.Member;
-import com.react.project2.domain.Study;
-import com.react.project2.domain.StudyMember;
+import com.react.project2.domain.*;
 import com.react.project2.dto.PageRequestDTO;
 import com.react.project2.dto.PageResponseDTO;
 import com.react.project2.dto.StudyDTO;
@@ -89,12 +86,17 @@ public class StudyServiceImpl implements StudyService {
 // 스터디 조회
 @Override
 public StudyDTO get(Long id) {
-    Study study = studyRepository.selectOneById(id).orElseThrow();
+    Study study = studyRepository.findById(id).orElseThrow();
     StudyDTO StudyDTO = entityToDTO(study);
     log.info("Study-serviceImpl-----");
     log.info(StudyDTO.getTitle());
     return StudyDTO;
 }
+
+    @Override
+    public Study getEntity(Long id) {
+        return studyRepository.findById(id).orElseThrow();
+    }
 
     // 스터디 수정
     @Override
@@ -104,22 +106,17 @@ public StudyDTO get(Long id) {
                 .orElseThrow(() -> new IllegalArgumentException("해당 스터디가 존재하지 않습니다."));
 
         // DTO에서 받은 정보로 엔티티의 필드를 업데이트합니다.
-        study.setThImg(studyDTO.getThImg());
-        study.setTitle(studyDTO.getTitle());
-        study.setContent(studyDTO.getContent());
-
-        // 여기에 Member 객체를 조회하고 설정하는 로직을 추가합니다.
-        Member member = memberRepository.findByEmail(studyDTO.getMemberEmail())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
-        study.setMember(member);
-
-        study.setLocation(studyDTO.getLocation());
-        study.setStudyDate(studyDTO.getStudyDate());
-        study.setStudyDeadlineDate(studyDTO.getStudyDeadlineDate());
-        study.setLocationX(studyDTO.getLocationX());
-        study.setLocationY(studyDTO.getLocationY());
-        study.setMaxPeople(studyDTO.getMaxPeople());
-        study.setCategory(studyDTO.getCategory());
+        study.changeTitle(studyDTO.getTitle());
+        study.changeThImg(studyDTO.getThImg());
+        study.changeContent(studyDTO.getContent());
+        study.changeLocation(studyDTO.getLocation());
+        study.changeLocationX(studyDTO.getLocationX());
+        study.changeLocationY(studyDTO.getLocationY());
+        studyDTO.changeStudyDateWithOutT(studyDTO.getStrStudyDate());
+        //TODO 데드라인 날짜 추가
+        study.changeStudyDate(studyDTO.getStudyDate());
+        study.changeMaxPeople(studyDTO.getMaxPeople());
+        study.changeCategory(studyDTO.getCategory());
 
         // 변경사항을 저장합니다.
         studyRepository.save(study);
@@ -128,14 +125,12 @@ public StudyDTO get(Long id) {
     // 스터디 삭제
     @Override
     public boolean delete(Long id) {
-        Optional<Study> studyOptional = studyRepository.findById(id);
-        if (studyOptional.isPresent()) {
-            Study study = studyOptional.get();
-            study.setDisabled(true);
+        Study study = studyRepository.findById(id).orElseThrow();
+
+            study.changeDisabled(true);
             studyRepository.save(study);
             return true;
-        }
-        return false;
+
     }
 
     // 스터디 참가
@@ -145,20 +140,16 @@ public StudyDTO get(Long id) {
         Study study = studyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 스터디가 존재하지 않습니다."));
 
-        // 사용자 엔티티 조회
-        Member member = memberRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
-
-        // 이미 참가신청을 했는지 확인
+        // 스터디 멤버 리스트에 사용자가 이미 있는지 확인
         if (study.getStudyMemberList().stream().anyMatch(m -> m.getEmail().equals(userEmail))) {
             log.info("이미 참가신청을 한 사용자입니다.");
             throw new IllegalStateException("이미 참가신청이 완료되었습니다.");
         }
 
         // 참가인원이 최대인원을 초과하지 않았는지 확인
-        if (study.getStudyMemberList().size() >= study.getMaxPeople()) {
-            log.info("참가인원이 이미 최대입니다.");
-            throw new IllegalStateException("참가인원이 이미 최대입니다.");
+        if (study.getStudyMemberList().stream().filter(m -> m.getStatus() == MemberStatus.ACCEPT).count() >= study.getMaxPeople()) {
+            log.info("확정인원이 이미 최대입니다.");
+            throw new IllegalStateException("확정인원이 이미 최대입니다.");
         }
 
         // 참가신청 로직
@@ -171,72 +162,18 @@ public StudyDTO get(Long id) {
         return true;
     }
 
-    // 스터디 참가취소
     @Override
-    public boolean participationCancel(Long id, String userEmail) {
+    public void changeMemberStatus(Long id, String userEmail, MemberStatus status) {
         // 스터디 엔티티 조회
         Study study = studyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 스터디가 존재하지 않습니다."));
 
-        // 사용자 엔티티 조회
-        Member member = memberRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
-
-        // 참가자 목록에서 사용자 제거
-        boolean isRemoved = study.getStudyMemberList().removeIf(m -> m.getEmail().equals(userEmail));
-
-        if (!isRemoved) {
-            // 사용자가 참가자 목록에 없는 경우
-            log.info("해당 사용자는 참가자 목록에 없습니다.");
-            return false;
-        }
+        // 참가자 목록에서 사용자 status를 변경
+        study.changeStudyMemberStatus(userEmail, status);
 
         // 변경사항 저장
         studyRepository.save(study);
-        return true;
     }
-
-    // 스터디 참가 수락
-    @Override
-    public boolean acceptJoin(Long id, String memberEmail) {
-        // 스터디 엔티티 조회
-        Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 스터디가 존재하지 않습니다."));
-
-        // 참가자 목록에서 참가 수락
-        boolean isAccepted = study.acceptJoin(id, memberEmail);
-
-        // 변경사항 저장
-        if (isAccepted) {
-            studyRepository.save(study);
-        }
-
-        return isAccepted;
-    }
-
-
-    // 스터디 참가 거절
-    @Override
-    public boolean declineJoin(Long id, String memberEmail) {
-        // 스터디 엔티티 조회
-        Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 스터디가 존재하지 않습니다."));
-
-        // 스터디 참가자 목록에서 멤버 제거
-        boolean isRemoved = study.removeStudyMember(memberEmail);
-
-        if (!isRemoved) {
-            // 멤버가 참가자 목록에 없는 경우
-            log.info("해당 멤버는 참가자 목록에 없습니다.");
-            return false;
-        }
-
-        // 변경사항 저장
-        studyRepository.save(study);
-        return true;
-    }
-
-
 
     // 스터디 시작
     @Override
@@ -244,14 +181,43 @@ public StudyDTO get(Long id) {
         Optional<Study> studyOptional = studyRepository.findById(id);
         if (studyOptional.isPresent()) {
             Study study = studyOptional.get();
-            study.setIsConfirmed(true);
+            study.changeIsConfirmed(true);
             studyRepository.save(study);
             return true;
         }
         return false;
     }
 
+    @Override
+    public int countStudy(String email) {
+         return studyRepository.countStudy(email);
+    }
 
+    @Override
+    public int countJoinStudy(String email) {
+       return studyRepository.countJoinStudy(email);
+    }
+
+    @Override
+    public void createNotice(Long studtyId, String userEmail, boolean creator,  NoticeType type){
+        Study study = studyRepository.findById(studtyId).orElseThrow();
+        if (creator) {
+            userEmail = study.getMember().getEmail();
+        }
+        if (userEmail.equals("ALL")) {
+            List<StudyMember> studyMemberList = study.getStudyMemberList();
+            for (StudyMember studyMember : studyMemberList) {
+                Member member = memberRepository.findByEmail(studyMember.getEmail()).orElseThrow();
+                // noticeId 추가
+                member.addNotice(study, creator, type);
+                memberRepository.save(member);
+            }
+            return;
+        }
+        Member member = memberRepository.findByEmail(userEmail).orElseThrow();
+        member.addNotice(study, creator, type);
+        memberRepository.save(member);
+    }
 
     private StudyDTO entityToDTO(Study study){
 
@@ -269,6 +235,7 @@ public StudyDTO get(Long id) {
                 .locationY((Double) study.getLocationY())
                 .studyDate(study.getStudyDate())
                 .maxPeople(study.getMaxPeople())
+                .isConfirmed(study.getIsConfirmed())
                 .category(study.getCategory())
                 .studyMemberList(study.getStudyMemberList())
                 .build();

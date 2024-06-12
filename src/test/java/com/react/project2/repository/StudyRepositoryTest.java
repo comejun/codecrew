@@ -61,10 +61,10 @@ class StudyRepositoryTest {
 
             // 37.57163048751097, 126.9768859784546
 
-//            37.58 ~ 37.59 사이 랜덤값 생성
-            double locationY = 37.000000 + Math.random() * (38.000000 - 37.000000);
-// 126.9668859784500 ~ 126.9868859784600 사이 랜덤값 생성
-            double locationX = 126.500000 + Math.random() * (127.500000 - 126.500000);
+//            37.300000000 ~ 37.700000000 사이 랜덤값 생성
+            double locationY = 37.300000000 + Math.random() * (37.700000000 - 37.300000000);
+// 126.600000000 ~ 127.200000000 사이 랜덤값 생성
+            double locationX = 126.600000000 + Math.random() * (127.200000000 - 126.600000000);
 
             Category category = Category.values()[(int) (Math.random() * Category.values().length)];
 

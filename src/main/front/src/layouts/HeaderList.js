@@ -35,11 +35,7 @@ export default function HeaderList() {
         {/* 검색페이지 헤더 */}
         <div className="headerBackContnent">
           <div onClick={onclickBtn}>
-            <img
-              src="../assets/imgs/icon/ic_map.svg"
-              alt="backBtn"
-              height="36px"
-            />
+            <img src="../assets/imgs/icon/ic_map.svg" alt="backBtn" height="36px" />
           </div>
         </div>
         <div className="headerSearchContent">
@@ -49,11 +45,14 @@ export default function HeaderList() {
             maxLength="20"
             placeholder="검색어를 입력해주세요."
             onInput={handleInput}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchText.trim().length > 0) {
+                searchFromList();
+              }
+            }}
           />
-          <img
-            src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"}
-            onClick={searchFromList}
-          />
+
+          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} onClick={searchFromList} />
         </div>
       </div>
       <CategoryFilterList />

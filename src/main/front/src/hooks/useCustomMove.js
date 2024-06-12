@@ -45,8 +45,22 @@ const useCustomMove = () => {
     navigate(`/list/profile/${email}`);
   };
 
+  const replaceAndRedirectTo = (path) => {
+    navigate(path, { replace: true });
+  };
 
   // TODO 함수 작성 후 return 추가
-  return { moveToLogin, moveToMypage, moveToModify, moveToMain, moveToAddPage, moveToProfilePage, moveToModifyPage, moveToReadPage, moveToAddPageWithData }
+  return {
+    moveToLogin,
+    moveToMypage,
+    moveToModify,
+    moveToMain,
+    moveToAddPage,
+    moveToProfilePage,
+    moveToModifyPage,
+    moveToReadPage,
+    moveToAddPageWithData,
+    replaceAndRedirectTo,
+  };
 };
 export default useCustomMove;

@@ -6,3 +6,15 @@ div.listContentWrap{
   width: 100%;
   padding-top: 52px;
 }
+div.myFooter{
+  width: calc(100% - 32px);
+  margin-left:16px;
+  text-align: center;
+  margin-top: 120px;
+  span{
+    display: block;
+    width: 100%;
+    font-size: 11px;
+    color:#dcdcdc;
+  }
+}

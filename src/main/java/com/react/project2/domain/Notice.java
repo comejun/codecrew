@@ -1,31 +1,28 @@
 package com.react.project2.domain;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Embeddable
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Notice {
 
-        // TODO: Notice Entity 수정
-
-        private String title; // 제목
-
-        private LocalDateTime createdDate; // 생성 날짜
-
-        private boolean checked; // 확인 여부
-
-        private String category; // 카테고리
-
-        private String boardId; // 게시판 ID
-
-        private String boardWriter; // 게시판 작성자
-
-        private String boardWriterProfileImg; // 게시판 작성자 프로필 이미지
+    private Long noticeId; // 공지 ID
+    private boolean isCreator; // 생성자 여부
+    @Builder.Default
+    private LocalDateTime createdDate = LocalDateTime.now(); // 생성 날짜
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Study study; // 스터디
+    @Enumerated(EnumType.STRING)
+    private NoticeType noticeType; // 공지 유형
 
 }
+
+
+

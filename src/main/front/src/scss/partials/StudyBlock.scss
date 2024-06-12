@@ -20,23 +20,31 @@ div.studyBlockWrap{
   }
   div.studyBlockTitle{
     width: calc(100% - 198px);
+    overflow: hidden;
     text-align: left;
     margin-top: 8px;
     h3{
       font-weight: 600;
       font-size: 18px;
       line-height: 18px;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
     p{
       font-size: 14px;
       line-height: 14px;
       color:#828282;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
   }
   
   div.studyBlockBtn{
     width:80px;
     margin-top:8px;
+    text-align: right;
     margin-right: 16px;
   }
 }

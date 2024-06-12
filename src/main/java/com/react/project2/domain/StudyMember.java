@@ -21,9 +21,8 @@ public class StudyMember {
 
     private String email;
 
-    private LocalDateTime createdDate; // 생성 날짜
-
-    private boolean checked; // 확인 여부
+    @Builder.Default
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     // 대기, 수락, 거절, 탈퇴, 출석, 미출석
     @Enumerated(EnumType.STRING)
@@ -48,7 +47,10 @@ public class StudyMember {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setChecked(boolean checked){ this.checked = checked; }
+
+    public void setStatus(MemberStatus status) {
+        this.status = status;
+    }
 
 
 }

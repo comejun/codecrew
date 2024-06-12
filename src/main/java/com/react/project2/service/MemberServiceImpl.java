@@ -1,8 +1,7 @@
 package com.react.project2.service;
 
 import com.react.project2.domain.Member;
-import com.react.project2.dto.DataMemberDTO;
-import com.react.project2.dto.MemberDTO;
+import com.react.project2.dto.*;
 import com.react.project2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,11 +56,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
+
+    @Override
     public DataMemberDTO getMember(String email) {
         Member findMember = memberRepository.getMemberWithFavoriteList(email);
         // Member Entity -> DataMemberDTO
         DataMemberDTO dataMemberDTO = modelMapper.map(findMember, DataMemberDTO.class);
         return dataMemberDTO;
+    }
+
+    public Member getMemberEntity(String email) {
+        Member findMember = memberRepository.getMemberWithFavoriteList(email);
+        return findMember;
     }
 
     @Override
@@ -86,6 +95,12 @@ public class MemberServiceImpl implements MemberService {
             return dataMemberDTO;
         }
         return null;
+    }
+
+    @Override
+    public int getNoticeCount(String email) {
+        Member findMember = memberRepository.getMemberWithNoticeList(email);
+        return findMember.getNoticeCount();
     }
 
     // 소셜회원 정보로 Member Entity 생성

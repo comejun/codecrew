@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { postAdd } from "../../api/studyAPI";
+import { modifyStudy, postAdd } from "../../api/studyAPI";
 import BasicLayoutPage from "../../layouts/BasicLayoutPage";
 import "../../scss/pages/AddPage.scss";
 import { API_SERVER_HOST } from "../../api/memberAPI";
@@ -93,31 +93,40 @@ const ModifyPage = () => {
     // 확인 처리
     if (imgSrc === null) {
       alert("이미지가 등록되지 않았습니다.");
+      const imageDiv = document.querySelector(".StudyAddImg");
+      imageDiv.setAttribute("tabindex", "0");
+      imageDiv.focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
     if (study.title === "") {
       alert("제목이 입력되지 않았습니다.");
+      document.getElementsByName("title")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
     if (study.location === "") {
       alert("위치정보가 입력되지 않았습니다.");
+      document.getElementsByName("location")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
     if (study.studyDate === "") {
       alert("참여날짜가 입력되지 않았습니다.");
+      document.getElementsByName("studyDate")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
     // 참여 날짜가 현재시간으로 부터 24시간이후 보다 전이면 중단
     if (new Date(study.studyDate).getTime() < new Date().getTime() + 86400000) {
       alert("참여날짜는 현재시간으로부터 24시간 이후로 설정해주세요.");
+      document.getElementsByName("studyDate")[0].focus();
       return;
     }
     if (study.category === "카테고리 선택" || study.category === "") {
       alert("카테고리가 입력되지 않았습니다.");
+      document.getElementsByName("category")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
     if (study.content === "") {
       alert("소개글이 입력되지 않았습니다.");
+      document.getElementsByName("content")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
 
@@ -145,11 +154,31 @@ const ModifyPage = () => {
     console.log(formData);
 
     // 여기에 서버로 데이터를 전송하는 코드를 추가합니다.
-    postAdd(formData).then((data) => {
+    modifyStudy(formData).then((data) => {
       console.log("postAdd result : ", data);
       alert("수정완료");
       moveToReadPage(id);
     });
+  };
+
+  // 타이핑 체크
+  const [titleLength, setTitleLength] = useState(0);
+  const [contentLength, setContentLength] = useState(0);
+
+  const handleTitleChange = (e) => {
+    const inputLenght = e.target.value.length;
+    if (inputLenght <= 24) {
+      handleChangeStudy(e);
+      setTitleLength(inputLenght);
+    }
+  };
+
+  const handleContentChange = (e) => {
+    const inputLenght = e.target.value.length;
+    if (inputLenght <= 200) {
+      handleChangeStudy(e);
+      setContentLength(inputLenght);
+    }
   };
 
   return (
@@ -194,34 +223,43 @@ const ModifyPage = () => {
               <input
                 name="title"
                 value={study.title}
+                maxLength={24}
                 type="text"
                 placeholder="스터디명을 입력해주세요."
                 onKeyUp={checkSpecialCharacters}
                 onKeyDown={checkSpecialCharacters}
-                onChange={handleChangeStudy}
+                onChange={handleTitleChange}
               />
+              <span
+                style={{
+                  color: "#dcdcdc",
+                  fontSize: "12px",
+                  textAlign: "right",
+                  display: "block",
+                }}
+              >
+                {titleLength} / 24
+              </span>
             </div>
             <div onClick={handleAddressSearchClick}>
               <h3>주소</h3>
-              <input name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
+              <input id="location" name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
 
               <img className="AdressSearch" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} alt="searchIcon" />
             </div>
             <div>
               <h3>참여날짜</h3>
               <input
+                id="studyDate"
                 name="studyDate"
                 value={study.studyDate}
                 type="datetime-local"
-                placeholder="참여일을 입력해주세요."
-                onChange={handleChangeStudy}
-                min={new Date().toISOString().substring(0, 16)}
-                max={new Date(new Date().getTime() + 12096e5).toISOString().substring(0, 16)}
+                readOnly
               />
             </div>
             <div>
               <h3>참여인원</h3>
-              <select name="maxPeople" value={study.maxPeople} onChange={handleChangeStudy}>
+              <select id="maxPeople" name="maxPeople" value={study.maxPeople} onChange={handleChangeStudy}>
                 {Array.from({ length: 9 }, (_, index) => (
                   <option key={index} value={index + 2}>
                     {index + 2}
@@ -231,7 +269,7 @@ const ModifyPage = () => {
             </div>
             <div>
               <h3>카테고리</h3>
-              <select name="category" value={study.category} onChange={handleChangeStudy}>
+              <select id="category" name="category" value={study.category} onChange={handleChangeStudy}>
                 <option hidden>카테고리 선택</option>
                 {Object.entries(categories).length > 0 &&
                   Object.entries(categories).map(([key, value], index) => (
@@ -249,10 +287,20 @@ const ModifyPage = () => {
                 name="content"
                 value={study.content}
                 placeholder="스터디소개를 입력해주세요."
-                onChange={handleChangeStudy}
+                onChange={handleContentChange}
                 onKeyUp={checkSpecialCharacters}
                 onKeyDown={checkSpecialCharacters}
               ></textarea>
+              <span
+                style={{
+                  color: "#dcdcdc",
+                  fontSize: "12px",
+                  textAlign: "right",
+                  display: "block",
+                }}
+              >
+                {contentLength} / 200
+              </span>
             </div>
           </div>
           <div className="bottomBtnWrap">

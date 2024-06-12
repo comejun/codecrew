@@ -28,7 +28,8 @@ const useMemberProfile = (userEmail) => {
         } else if (res.profileImg) {
           setImgSrc(`${host}/api/image/view/${res.profileImg}`);
         }
-        setMember({ ...res });
+        console.log("res", res);
+        setMember(res);
       })
       .catch((err) => exceptionHandle(err));
   }, [userEmail]);

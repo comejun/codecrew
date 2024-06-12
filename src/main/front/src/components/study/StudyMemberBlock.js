@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../scss/partials/StudyMemberBlock.scss";
 import useCustomMove from "../../hooks/useCustomMove";
 import useMemberProfile from "../../hooks/useMemberProfile";
@@ -6,58 +6,109 @@ import useHandleStudyMember from "../../hooks/useHandleStudyMember";
 
 // StudyMemberBlock 컴포넌트 정의
 const StudyMemberBlock = ({
-  email,
+  memberData,
   currentUserEmail,
   studyCreatorEmail,
   studyId,
-  studyMemberList,
+  reRender,
 }) => {
   // 멤버 프로필 정보와 이미지 URL을 가져오는 커스텀 훅 사용
-  const { member, imgSrc } = useMemberProfile(email);
+  const { member, imgSrc } = useMemberProfile(memberData.email);
   // 페이지 이동 관련 커스텀 훅 사용
   const { moveToProfilePage } = useCustomMove();
 
   // 스터디 참가 수락,거절 처리를 위한 커스텀 훅 사용
   const { handleJoinDecline, handleJoinAccept } = useHandleStudyMember();
 
-  // 현재 멤버의 참가 상태 확인
-  const isMemberChecked = studyMemberList.some(
-    (memberItem) => memberItem.email === member.email && memberItem.checked,
-  );
-
   // 수락 버튼 클릭 핸들러
-  const onAcceptClick = () => {
-    handleJoinAccept(studyId, member.email);
+  const onAcceptClick = async () => {
+    await handleJoinAccept(studyId, member.email);
+    reRender();
   };
   // 거절 버튼 클릭 핸들러
-  const onDeclineClick = () => {
-    handleJoinDecline(studyId, member.email);
+  const onDeclineClick = async () => {
+    await handleJoinDecline(studyId, member.email);
+    reRender();
   };
 
   // 버튼 렌더링 함수
-  const renderButton = () => {
-    if (currentUserEmail === studyCreatorEmail && !isMemberChecked) {
-      return (
-        <>
-          <button className="btnSmallPoint" onClick={onAcceptClick}>
-            수락
-          </button>
-          <button className="btnSmallBlack" onClick={onDeclineClick}>
-            거절
-          </button>
-        </>
-      );
-    } else if (isMemberChecked) {
-      return (
+  const renderButtonCheck = () => {
+    console.log(memberData.status);
+    if (memberData.status === "HOLD") {
+      if (currentUserEmail === studyCreatorEmail) {
+        return renderSelectButton();
+      } else {
+        return renderHoldButton();
+      }
+    } else if (memberData.status === "ACCEPT") {
+      return renderAcceptedButton();
+    } else if (memberData.status === "DECLINE") {
+      return renderDeclinedButton();
+    } else if (memberData.status === "WITHDRAW") {
+      return renderWithdrawnButton();
+    }
+  };
+
+  // 수락, 거절 버튼 렌더링 함수
+  const renderSelectButton = () => {
+    return (
+      <>
+        <button className="btnSmallPoint" onClick={onAcceptClick}>
+          수락
+        </button>
+        <button className="btnSmallBlack" onClick={onDeclineClick}>
+          거절
+        </button>
+      </>
+    );
+  };
+
+  const renderAcceptedButton = () => {
+    return (
+      <>
         <button
           className="btnSmallGrey"
           style={{ marginTop: "16px", cursor: "default" }}
         >
           참가완료
         </button>
-      );
-    }
-    return null;
+      </>
+    );
+  };
+
+  const renderDeclinedButton = () => {
+    return (
+      <>
+        <button
+          className="btnSmallBlack"
+          style={{ marginTop: "16px", cursor: "default" }}
+        >
+          거절
+        </button>
+      </>
+    );
+  };
+  const renderWithdrawnButton = () => {
+    return (
+      <>
+        <button
+          className="btnSmallBlack"
+          style={{ marginTop: "16px", cursor: "default" }}
+        >
+          탈퇴
+        </button>
+      </>
+    );
+  };
+  const renderHoldButton = () => {
+    return (
+      <button
+        className="btnSmallPoint"
+        style={{ marginTop: "16px", cursor: "default" }}
+      >
+        대기중
+      </button>
+    );
   };
 
   // 컴포넌트 렌더링
@@ -76,7 +127,7 @@ const StudyMemberBlock = ({
           {member.email}
         </p>
       </div>
-      <div className="studyMemberBlockBtn">{renderButton()}</div>
+      <div className="studyMemberBlockBtn">{renderButtonCheck()}</div>
     </div>
   );
 };

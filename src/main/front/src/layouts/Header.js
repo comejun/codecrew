@@ -14,11 +14,9 @@ export default function Header() {
           </Link>
         </div>
         <div className="headerNavContent">
-          <Link to="/search">
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_bk.svg"} alt="searchIcon" />
-          </Link>
+          {/* <Link to="/search"><img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_bk.svg"} alt="searchIcon" /></Link> */}
           <Link to="/list">
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_li_bk.svg"} alt="listIcon" />
+            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_bk.svg"} alt="searchIcon" />
           </Link>
         </div>
       </div>

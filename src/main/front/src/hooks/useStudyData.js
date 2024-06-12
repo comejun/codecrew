@@ -3,7 +3,7 @@ import { getOne } from "../api/studyAPI";
 import { useNavigate } from "react-router-dom";
 import { API_SERVER_HOST } from "../api/memberAPI";
 
-const useStudyData = (id) => {
+const useStudyData = (id, refresh) => {
   // 스터디 저장값 초기화
   const initState = {
     id: "",
@@ -18,9 +18,10 @@ const useStudyData = (id) => {
     maxPeople: 2,
     category: "", // 빈 배열로 초기화
     disabled: "",
+    isConfirmed: "",
     studyMemberList: [],
   };
-
+  const refresh1 = refresh;
   const [study, setStudy] = useState(initState);
   const navigate = useNavigate();
   const [imgStudySrc, setStudyImgSrc] = useState("");
@@ -43,7 +44,7 @@ const useStudyData = (id) => {
       .catch((error) => {
         console.error("데이터 불러오는 중...", error);
       });
-  }, [id, host, navigate]); // host를 의존성 배열에 추가
+  }, [id, host, navigate, refresh1]); // host를 의존성 배열에 추가
 
   // 리턴
   return { study, imgStudySrc };

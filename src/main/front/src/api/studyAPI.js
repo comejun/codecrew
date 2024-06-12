@@ -20,9 +20,10 @@ export const getOne = async (id) => {
 };
 
 // API 스터디 수정 요청
-export const modifyStudy = async (id, study) => {
-  console.log(`${host}/modify/${id}`);
-  const response = await jwtAxios.put(`${host}/modify/${id}`, study);
+export const modifyStudy = async (study) => {
+  console.log(`${host}/modify`);
+  const header = { headers: { "Content-Type": "multipart/form-data" } };
+  const response = await jwtAxios.put(`${host}/modify`, study, header);
   return response.data;
 };
 
@@ -33,4 +34,29 @@ export const getList = async (pageParam, email) => {
     params: { page, size }, // 여기서 page와 size를 동적으로 설정
   });
   return response.data;
+// API 생성한 스터디 개수 요청
+export const fetchMyStudyCount = async (userEmail) => {
+  try {
+    const response = await jwtAxios.get(`${host}/countmy`, {
+      params: { email: userEmail },
+    });
+    console.log("스터디 개수", response.data.count);
+    return response.data.count;
+  } catch (error) {
+    console.error("스터디 개수를 가져오는데 실패했습니다.", error);
+    return 0;
+  }
+};
+
+// API 참여한 스터디 개수 요청
+export const fetchMyStudyJoinCount = async (userEmail) => {
+  try {
+    const response = await jwtAxios.get(`${host}/countmyJoin`, {
+      params: { email: userEmail },
+    });
+    return response.data.count;
+  } catch (error) {
+    console.error("스터디 개수를 가져오는데 실패했습니다.", error);
+    return 0;
+  }
 };

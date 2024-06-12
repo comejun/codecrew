@@ -1,52 +1,51 @@
-/* Study Block */ 
+/* Study Block */
 div.AlBlockWrap{
   width: 100%;
-  height:64px;
-  margin-top: 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center; /* 세로 중앙 정렬을 위해 추가 */
   border-bottom: 0.5px solid #dcdcdc;
-  div.AlBlockImg{
-    width: 48px;
-    height:48px;
-    margin-left: 16px;
-    margin-right: 20px;
-    background-image: url(../../../public/assets/imgs/icon/ic_al.png);
-    // 이미지 적용 시 위치값
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  div.AlBlockTitle{
-    width: calc(100% - 198px);
-    text-align: left;
-    h3{
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 18px;
-    }
-    p{
-      font-size: 14px;
-      line-height: 14px;
-      color:#828282;
-    }
-  }
+}
 
-  div.AlBlockBtn{
-    width:34px;
-    margin-right: 16px;
-    line-height: 48px;
-    button{
-      display: none;
-      img{
-        width: 34px;
-      }
-    }
-  }
-  div.delActive{
-    button{
-      cursor: pointer;
-      display: block;
-    }
-  }
+div.AlBlockImg{
+  width: 48px;
+  height: 48px;
+  margin-left: 16px;
+  margin-right: 0px;
+  background-image: url(../../../public/assets/imgs/icon/ic_al.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+div.AlBlockTitle{
+  width: calc(100% - 198px);
+  text-align: left;
+  margin-top: 16px;
+}
+
+div.AlBlockTitle h3{
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+div.AlBlockTitle p{
+  font-size: 12px;
+  line-height: 12px;
+  color: #828282;
+}
+
+div.AlBlockBtn{
+  width: 34px;
+  margin-right: 16px;
+  line-height: 48px;
+}
+
+div.AlBlockBtn button{
+  cursor: pointer;
+}
+
+div.AlBlockBtn button img{
+  width: 34px;
 }

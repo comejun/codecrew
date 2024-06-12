@@ -49,14 +49,11 @@ public class StudyDTO {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         this.studyDate = LocalDateTime.parse(strStudyDate, formatter);
     }
-    // isConfirmed 속성에 대한 getter와 setter 메소드
-    public boolean getIsConfirmed() {
-        return isConfirmed;
+    public void changeStudyDateWithOutT(String strStudyDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.studyDate = LocalDateTime.parse(strStudyDate, formatter);
     }
 
-    public void setIsConfirmed(boolean isConfirmed) {
-        this.isConfirmed = isConfirmed;
-    }
 
     public static StudyDTO convert(Study study) {
 

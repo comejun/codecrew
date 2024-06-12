@@ -23,22 +23,32 @@ div.ReadImg{
   background-size: cover;
 }
 div.ReadTitle{
-  width: calc(100% - 174px);
+  width: calc(100% - 198px);
   text-align: left;
   margin-top: 8px;
   h3{
     font-weight: 600;
     font-size: 18px;
+    line-height: 18px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
   }
   p{
     font-size: 14px;
+    line-height: 14px;
     color:#828282;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
   }
 }
 div.ReadBtn{
   width:80px;
+  text-align: right;
   button{
     margin-top: 0px;
+    margin-right: 16px;
   }
   button:last-child{
     margin-top: 8px;
@@ -113,7 +123,8 @@ div.ReadUserCheck{
     display: block;
     position: absolute;
     top:-6px;
-    right: calc(-100% + 30px);
+    width: 100%;
+    text-align: right;
   }
 }
 
