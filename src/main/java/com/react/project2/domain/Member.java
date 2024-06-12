@@ -68,7 +68,9 @@ public class Member {
     @Builder.Default
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    // 탈퇴일자 입력
     // 탈퇴 날짜
+    @Setter
     private LocalDateTime disabledDate;
 
     // 사용자 권한

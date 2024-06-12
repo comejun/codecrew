@@ -32,7 +32,7 @@ const MyStudyCretPage = () => {
   const [items, setItems] = useState(Array.from({ length: 20 }));
 
   const fetchData = () => {
-    getList({ page: page, size: 10 }, "selly117@daum.net").then((data) => {
+    getList({ page: page, size: 10 }, userEmail).then((data) => {
       if (data.list.length > 0) {
         setStudyList((prevList) => [...prevList, ...data.list]);
         setPage((prevPage) => prevPage + 1);

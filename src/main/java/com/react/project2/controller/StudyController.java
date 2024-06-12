@@ -32,6 +32,18 @@ public class StudyController {
         // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
         return studyService.getListMember(pageRequestDTO, memberEmail);
     }
+//    // 스터디 멤버 목록 조회
+//    @GetMapping("/memberList/{email}")
+//    public PageResponseDTO<StudyDTO> memberList(
+//            PageRequestDTO pageRequestDTO,
+//            @PathVariable("email") String memberEmail) {
+//        log.info("******* StudyController - list/email : {}", memberEmail);
+//        log.info("******* StudyController - list/email pageRequestDTO : {}", pageRequestDTO);
+//        // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
+//        return studyService.getListMember(pageRequestDTO, memberEmail);
+//    }
+
+
 
     // 스터디 등록
     @PostMapping("/")

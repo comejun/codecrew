@@ -49,11 +49,31 @@ const ReadPage = () => {
     moveToPath("/");
   };
 
+  const handleClickDisabled = async () => {
+    try {
+      const response = await axios.put(
+        `${host}/api/member/${userEmail}/disable`
+      );
+      if (response.status === 200) {
+        console.log("Member disabled successfully:", response.data);
+        execLogout();
+        moveToPath("/");
+        alert("회원 탈퇴가 완료되었습니다.");
+      } else {
+        console.error("Failed to disable member:", response);
+      }
+    } catch (error) {
+      console.error("회원 탈퇴에 실패했습니다.", error);
+    }
+  };
   return (
     <BasicLayoutPage headerTitle="마이페이지">
       <div>
         <div className="MyBlockWrap">
-          <div className="MyReadImg" style={imgSrc !== "" ? { backgroundImage: `url(${imgSrc})` } : null}></div>
+          <div
+            className="MyReadImg"
+            style={imgSrc !== "" ? { backgroundImage: `url(${imgSrc})` } : null}
+          ></div>
           <div className="MyReadTitle">
             <h3>{member.nickname}</h3>
             <p>{member.email}</p>
@@ -103,7 +123,11 @@ const ReadPage = () => {
             {Object.entries(categories).length > 0 &&
               Object.entries(categories).map(([key, value], index) => (
                 <React.Fragment key={index}>
-                  <input id={key} type="checkbox" checked={member.favoriteList.includes(key)} />
+                  <input
+                    id={key}
+                    type="checkbox"
+                    checked={member.favoriteList.includes(key)}
+                  />
                   <label htmlFor={key}>{value}</label>
                 </React.Fragment>
               ))}
@@ -111,12 +135,19 @@ const ReadPage = () => {
         </div>
         <div className="MyReadUserText">
           <h2>사용자 소개</h2>
-          {member.introduction ? <p>{member.introduction}</p> : <p>사용자 소개가 없습니다.</p>}
+          {member.introduction ? (
+            <p>{member.introduction}</p>
+          ) : (
+            <p>사용자 소개가 없습니다.</p>
+          )}
         </div>
         <div className="MyReadUserText">
           <h2>사용자 링크</h2>
           {member.memberLink ? (
-            <p style={{ color: "#555", cursor: "pointer" }} onClick={() => window.open(member.memberLink, "_blank")}>
+            <p
+              style={{ color: "#555", cursor: "pointer" }}
+              onClick={() => window.open(member.memberLink, "_blank")}
+            >
               {member.memberLink}
             </p>
           ) : (
@@ -150,7 +181,7 @@ const ReadPage = () => {
             <span></span>
           </Link>
         </div>
-        <div className="MenuWrap">
+        <div onClick={handleClickDisabled} className="MenuWrap">
           <Link>
             <h3>🗑️ 회원탈퇴</h3>
             <span>(고객정보가 모두 삭제됩니다.)</span>

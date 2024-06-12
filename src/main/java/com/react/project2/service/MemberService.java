@@ -37,4 +37,7 @@ public interface MemberService {
 
     DataMemberDTO findMemberByPhone(String phone);
 
+    // 회원 탈퇴
+    public Member disableMember(String email);
+
 }
