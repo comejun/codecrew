@@ -52,14 +52,9 @@ const ReadPage = () => {
 
   const handleClickDisabled = async () => {
     const response = await disableMember(userEmail);
-    if (response.status === 200) {
-      console.log("Member disabled successfully:", response.data);
-      execLogout();
-      moveToPath("/");
-      alert("회원 탈퇴가 완료되었습니다.");
-    } else {
-      console.error("Failed to disable member:", response);
-    }
+    execLogout();
+    moveToPath("/");
+    alert("회원 탈퇴가 완료되었습니다.");
   };
   return (
     <BasicLayoutPage headerTitle="마이페이지">
