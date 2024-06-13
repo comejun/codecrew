@@ -16,6 +16,8 @@ import java.util.List;
 @Transactional
 public interface StudyService {
 
+    // ********** 스터디 등록, 조회, 수정, 삭제 **********
+
     // 스터디 등록
     void add(StudyDTO studyDTO);
 
@@ -30,23 +32,16 @@ public interface StudyService {
     // 스터디 조회(1개)
     StudyDTO get(Long id);
 
-    // 스터디 엔티티 조회
-    Study getEntity(Long id);
-
     // 스터디 수정
     void modifyStudy(StudyDTO studyDTO);
 
     // 스터디 삭제
     boolean delete(Long id);
 
-    // 스터디 참가신청
-    boolean participate(Long id, String userEmail);
+    // *************** 스터디 조건으로 조회 ***************
 
-    // 스터디 멤버 상태 변경
-    void changeMemberStatus(Long id, String userEmail, MemberStatus status);
-
-    // 스터디 시작
-    boolean startStudy(Long id);
+    // 마커용 스터디 카테고리별 전체 조회
+    List<StudyDTO> getStudyMarkerByCategory(String category);
 
     // 사용자 이메일로 생성한 스터디 개수 조회
     int countStudy(String email);
@@ -54,12 +49,39 @@ public interface StudyService {
     // 사용자 이메일로 참가한 스터디 개수 조회
     int countJoinStudy(String email);
 
-    // 알람 생성 기능
-    void createNotice(Long id, String userEmail, boolean creator,NoticeType type);
+    // 현재 시간을 기준으로 마감기한이 지난 스터디를 찾는다.
+    void checkStudyDeadline();
+
+    // 현재 시간을 기준으로 isConfirmed가 false인 studyDate가 지난 스터디를 찾는다.
+    void checkStudyDateAfterNow();
+
+    // 현재 시간을 기준으로 하루 뒤의 studyDate를 가지고 있는 isConfirmed가 true고 disabled가 false인 스터디를 찾는다.
+    void checkTomorrowStudyDate();
+
+    // 현재 날짜의 studyDate를 가지고 있는 isConfirmed가 true이고 disabled가 false인 스터디를 찾는다.
+    void checkTodayStudyDate();
+
+    // *************** 스터디 참가, 시작, 참가자 삭제 ***************
+
+    // 스터디 참가신청
+    boolean participate(Long id, String userEmail);
+
+    // 스터디 시작
+    boolean startStudy(Long id);
+
+    // 스터디 완료
+    boolean finishedStudy(Long id);
+
+    // DECLINE 상태인 참가자 삭제
+    void deleteDeclineMember(Long id);
 
 
-    // 마커용 스터디 카테고리별 전체 조회
-    List<StudyDTO> getStudyMarkerByCategory(String category);
+
+
+
+
+
+
 
 
 }

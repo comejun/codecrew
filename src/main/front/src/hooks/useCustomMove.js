@@ -4,14 +4,6 @@ import { useNavigate } from "react-router-dom";
 const useCustomMove = () => {
   const navigate = useNavigate();
 
-  // 페이지 이동 함수 작성
-  // 예시
-  // 리스트로 이동
-  /*const moveToList = () => {
-        navigate({ pathname: "/list"});
-    };*/
-  // TODO 이동 관련 함수 추가
-
   const moveToLogin = () => {
     navigate({ pathname: "/login" });
   };
@@ -49,6 +41,11 @@ const useCustomMove = () => {
     navigate(path, { replace: true });
   };
 
+  // 마이페이지
+  const moveToAlarmPage = () => {
+    navigate("/mypage/alarm");
+  };
+
   // TODO 함수 작성 후 return 추가
   return {
     moveToLogin,
@@ -61,6 +58,7 @@ const useCustomMove = () => {
     moveToReadPage,
     moveToAddPageWithData,
     replaceAndRedirectTo,
+    moveToAlarmPage,
   };
 };
 export default useCustomMove;

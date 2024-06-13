@@ -26,8 +26,13 @@ const ModifyPage = () => {
     setStudy(studyDate);
   }, [studyDate]); // 의존성 배열에 studySetting을 넣어줍니다.
 
+  const [deadlineChange, setDeadlineChange] = useState(false);
+
   // 사진 수정용 CustomHook 사용하기
-  const { imgSrc, handleFileChange, saveFile } = useProfileImage(studyDateImg, studyDate.studyDateImg);
+  const { imgSrc, handleFileChange, saveFile } = useProfileImage(
+    studyDateImg,
+    studyDate.studyDateImg,
+  );
 
   // 전체 관심스택 가져오기
   const categories = useCategories(host);
@@ -129,6 +134,11 @@ const ModifyPage = () => {
       document.getElementsByName("content")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
+    if (study.studyDeadLineDate === "") {
+      alert("모집 마감 날짜가 입력되지 않았습니다.");
+      document.getElementsByName("studyDeadLineDate")[0].focus();
+      return; // 함수 실행을 여기서 중단합니다.
+    }
 
     saveModify();
   };
@@ -146,7 +156,6 @@ const ModifyPage = () => {
     formData.append("content", study.content);
     formData.append("memberEmail", study.userEmail);
     formData.append("location", study.location);
-    formData.append("strStudyDate", study.studyDate);
     formData.append("maxPeople", parseInt(study.maxPeople));
     formData.append("category", study.category);
     formData.append("locationX", study.locationX);
@@ -181,6 +190,40 @@ const ModifyPage = () => {
     }
   };
 
+  const renderStudyDeadLineDate = () => {
+    return (
+      <select
+        id="strStudyDeadlineDate"
+        name="strStudyDeadlineDate"
+        value={study.strStudyDeadlineDate}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+        disabled
+      >
+        <option>{study.studyDeadlineDate}</option>
+      </select>
+    );
+  };
+
+  const calculateDeadLineDate = () => {
+    // studyDate에서 10일 전까지 날짜중 현재 날짜보다 이후의 날짜에 모집 마감 날짜를 설정할 수 있도록 합니다.
+    const studyDate = new Date(study.studyDate);
+    const currentDate = new Date();
+
+    const deadLineDate = [];
+    for (let i = 1; i <= 10; i++) {
+      const date = new Date(studyDate.getTime() - 86400000 * i);
+      // 현재 날짜보다 24시간 이후의 날짜만 선택할 수 있도록 합니다.
+      if (date.getTime() > currentDate.getTime() + 86400000) {
+        deadLineDate.push(
+          <option key={i} value={date.getTime()}>
+            {date.toLocaleDateString()}
+          </option>,
+        );
+      }
+    }
+    return deadLineDate;
+  };
+
   return (
     <>
       {/* 모달창입니다. */}
@@ -212,7 +255,12 @@ const ModifyPage = () => {
       <BasicLayoutPage headerTitle="스터디수정">
         <form>
           <div className="StudyAddWrap">
-            <div className="StudyAddImg" style={imgSrc !== "" ? { backgroundImage: `url(${imgSrc})` } : null}>
+            <div
+              className="StudyAddImg"
+              style={
+                imgSrc !== "" ? { backgroundImage: `url(${imgSrc})` } : null
+              }
+            >
               <label htmlFor="fileInput">
                 편집
                 <input id="fileInput" type="file" onChange={handleFileChange} />
@@ -243,9 +291,22 @@ const ModifyPage = () => {
             </div>
             <div onClick={handleAddressSearchClick}>
               <h3>주소</h3>
-              <input id="location" name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
+              <input
+                id="location"
+                name="location"
+                type="text"
+                value={study.location}
+                placeholder="주소를 입력해주세요."
+                readOnly
+              />
 
-              <img className="AdressSearch" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} alt="searchIcon" />
+              <img
+                className="AdressSearch"
+                src={
+                  process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"
+                }
+                alt="searchIcon"
+              />
             </div>
             <div>
               <h3>참여날짜</h3>
@@ -258,8 +319,17 @@ const ModifyPage = () => {
               />
             </div>
             <div>
+              <h3>모집 마감 날짜</h3>
+              {renderStudyDeadLineDate()}
+            </div>
+            <div>
               <h3>참여인원</h3>
-              <select id="maxPeople" name="maxPeople" value={study.maxPeople} onChange={handleChangeStudy}>
+              <select
+                id="maxPeople"
+                name="maxPeople"
+                value={study.maxPeople}
+                onChange={handleChangeStudy}
+              >
                 {Array.from({ length: 9 }, (_, index) => (
                   <option key={index} value={index + 2}>
                     {index + 2}
@@ -269,7 +339,12 @@ const ModifyPage = () => {
             </div>
             <div>
               <h3>카테고리</h3>
-              <select id="category" name="category" value={study.category} onChange={handleChangeStudy}>
+              <select
+                id="category"
+                name="category"
+                value={study.category}
+                onChange={handleChangeStudy}
+              >
                 <option hidden>카테고리 선택</option>
                 {Object.entries(categories).length > 0 &&
                   Object.entries(categories).map(([key, value], index) => (

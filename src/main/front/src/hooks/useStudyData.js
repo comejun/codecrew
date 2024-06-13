@@ -13,6 +13,7 @@ const useStudyData = (id, refresh) => {
     memberEmail: "",
     memberNickname: "작성자닉네임",
     memberPhone: "작성자연락처",
+    strStudyDeadlineDate: 3,
     location: "주소",
     studyDate: "날짜",
     maxPeople: 2,

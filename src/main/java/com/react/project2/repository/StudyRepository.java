@@ -58,6 +58,23 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @Query("SELECT COUNT(s) FROM Study s JOIN s.studyMemberList members WHERE members.email = :email and members.status in ('HOLD', 'ACCEPT') and s.disabled = false")
     int countJoinStudy(@Param("email") String email);
 
+    // 현재 시간보다 Deadline이 더 빠르고 isConfirmed이 false이며 disabled가 false인 스터디 전체 조회
+    @Query("select s from Study s where s.studyDeadlineDate < current_timestamp and s.isConfirmed = false and s.disabled = false")
+    List<Study> findAllByAfterDeadline();
+
+    // 현재 시간을 기준으로 5시간 이내의 studyDate를 가지고 있는 isConfirmed가 false이고 disabled가 false인 스터디를 찾는다.
+    @Query("select s from Study s where s.studyDate < current_timestamp + 5 and s.isConfirmed = false and s.disabled = false")
+    List<Study> findAllByAfterStudyDate();
+
+    // 현재 시간을 기준으로 하루 뒤의 studyDate를 가지고 있는 isConfirmed가 true고 disabled가 false인 스터디를 찾는다.
+    @Query("select s from Study s where s.studyDate = current_date + 1 and s.isConfirmed = true and s.disabled = false")
+    List<Study> findAllByTomorrowStudyDate();
+
+    // 현재 날짜의 studyDate를 가지고 있는 isConfirmed가 true이고 disabled가 false인 스터디를 찾는다.
+    @Query("select s from Study s where s.studyDate = current_date and s.isConfirmed = true and s.disabled = false")
+    List<Study> findAllByTodayStudyDate();
+
+
 
 
 }

@@ -5,13 +5,7 @@ import useMemberProfile from "../../hooks/useMemberProfile";
 import useHandleStudyMember from "../../hooks/useHandleStudyMember";
 
 // StudyMemberBlock 컴포넌트 정의
-const StudyMemberBlock = ({
-  memberData,
-  currentUserEmail,
-  studyCreatorEmail,
-  studyId,
-  reRender,
-}) => {
+const StudyMemberBlock = ({ memberData, currentUserEmail, studyCreatorEmail, studyId, reRender, studyConfirmed }) => {
   // 멤버 프로필 정보와 이미지 URL을 가져오는 커스텀 훅 사용
   const { member, imgSrc } = useMemberProfile(memberData.email);
   // 페이지 이동 관련 커스텀 훅 사용
@@ -41,11 +35,17 @@ const StudyMemberBlock = ({
         return renderHoldButton();
       }
     } else if (memberData.status === "ACCEPT") {
-      return renderAcceptedButton();
+      if (!studyConfirmed) {
+        return renderAcceptedButton();
+      } else {
+        return renderAcceptedStartButton();
+      }
     } else if (memberData.status === "DECLINE") {
       return renderDeclinedButton();
     } else if (memberData.status === "WITHDRAW") {
       return renderWithdrawnButton();
+    } else if (memberData.status === "ARRIVE") {
+      return renderArriveButton();
     }
   };
 
@@ -54,10 +54,10 @@ const StudyMemberBlock = ({
     return (
       <>
         <button className="btnSmallPoint" onClick={onAcceptClick}>
-          수락
+          수락하기
         </button>
         <button className="btnSmallBlack" onClick={onDeclineClick}>
-          거절
+          거절하기
         </button>
       </>
     );
@@ -66,11 +66,18 @@ const StudyMemberBlock = ({
   const renderAcceptedButton = () => {
     return (
       <>
-        <button
-          className="btnSmallGrey"
-          style={{ marginTop: "16px", cursor: "default" }}
-        >
+        <button className="btnSmallGrey" style={{ marginTop: "16px", cursor: "default" }}>
           참가완료
+        </button>
+      </>
+    );
+  };
+
+  const renderAcceptedStartButton = () => {
+    return (
+      <>
+        <button className="btnSmallGrey" style={{ marginTop: "16px", cursor: "default" }}>
+          도착예정
         </button>
       </>
     );
@@ -79,10 +86,7 @@ const StudyMemberBlock = ({
   const renderDeclinedButton = () => {
     return (
       <>
-        <button
-          className="btnSmallBlack"
-          style={{ marginTop: "16px", cursor: "default" }}
-        >
+        <button className="btnSmallBlack" style={{ marginTop: "16px", cursor: "default" }}>
           거절
         </button>
       </>
@@ -91,22 +95,27 @@ const StudyMemberBlock = ({
   const renderWithdrawnButton = () => {
     return (
       <>
-        <button
-          className="btnSmallBlack"
-          style={{ marginTop: "16px", cursor: "default" }}
-        >
+        <button className="btnSmallBlack" style={{ marginTop: "16px", cursor: "default" }}>
           탈퇴
         </button>
       </>
     );
   };
+
+  const renderArriveButton = () => {
+    return (
+      <>
+        <button className="btnSmallPoint" style={{ marginTop: "16px", cursor: "default" }}>
+          출석완료
+        </button>
+      </>
+    );
+  };
+
   const renderHoldButton = () => {
     return (
-      <button
-        className="btnSmallPoint"
-        style={{ marginTop: "16px", cursor: "default" }}
-      >
-        대기중
+      <button className="btnSmallPoint" style={{ marginTop: "16px", cursor: "default" }}>
+        참가대기
       </button>
     );
   };
@@ -114,18 +123,10 @@ const StudyMemberBlock = ({
   // 컴포넌트 렌더링
   return (
     <div className="studyMemberBlockWrap">
-      <div
-        className="studyMemberBlockImg"
-        style={imgSrc ? { backgroundImage: `url(${imgSrc})` } : null}
-        onClick={() => moveToProfilePage(member.email)}
-      ></div>
+      <div className="studyMemberBlockImg" style={imgSrc ? { backgroundImage: `url(${imgSrc})` } : null} onClick={() => moveToProfilePage(member.email)}></div>
       <div className="studyMemberBlockTitle">
-        <h3 onClick={() => moveToProfilePage(member.email)}>
-          {member.nickname}
-        </h3>
-        <p onClick={() => (window.location.href = `mailto:${member.email}`)}>
-          {member.email}
-        </p>
+        <h3 onClick={() => moveToProfilePage(member.email)}>{member.nickname}</h3>
+        <p onClick={() => (window.location.href = `mailto:${member.email}`)}>{member.email}</p>
       </div>
       <div className="studyMemberBlockBtn">{renderButtonCheck()}</div>
     </div>

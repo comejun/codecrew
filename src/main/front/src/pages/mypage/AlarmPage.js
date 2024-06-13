@@ -30,7 +30,7 @@ const AlarmPage = () => {
 
   return (
     <BasicLayoutPage headerTitle="알림">
-      {noticeList === null ? (
+      {noticeList === null || noticeList.length === 0 ? (
         <div className="nonePage">
           <img src="../assets/imgs/icon/ic_none.png" />
           <h2>아직 도착한 알림이 없어요</h2>

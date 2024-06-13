@@ -23,6 +23,7 @@ const initState = {
   memberEmail: "",
   location: "",
   studyDate: "",
+  studyDeadLineDate: 0,
   maxPeople: 2,
   category: "",
   locationX: "",
@@ -174,6 +175,11 @@ const AddPage = () => {
       document.getElementsByName("content")[0].focus();
       return; // 함수 실행을 여기서 중단합니다.
     }
+    if (study.studyDeadLineDate === 0) {
+      alert("모집 마감 날짜가 입력되지 않았습니다.");
+      document.getElementsByName("studyDeadLineDate")[0].focus();
+      return; // 함수 실행을 여기서 중단합니다.
+    }
 
     saveAdd();
   };
@@ -191,6 +197,7 @@ const AddPage = () => {
     formData.append("memberEmail", userEmail);
     formData.append("location", study.location);
     formData.append("strStudyDate", study.studyDate);
+    formData.append("strStudyDeadlineDate", study.studyDeadLineDate);
     formData.append("maxPeople", parseInt(study.maxPeople) - 1);
     formData.append("category", study.category);
     formData.append("locationX", study.locationX);
@@ -225,6 +232,48 @@ const AddPage = () => {
     }
   };
 
+  const renderStudyDeadLineDate = () => {
+    if (study.studyDate === "") {
+      return (
+        <select disabled>
+          <option>참여날짜를 먼저 입력해주세요.</option>
+        </select>
+      );
+    } else {
+      return (
+        <select
+          id="studyDeadLineDate"
+          name="studyDeadLineDate"
+          value={study.studyDeadLineDate}
+          onChange={handleChangeStudy}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+        >
+          {calculateDeadLineDate()}
+        </select>
+      );
+    }
+  };
+
+  const calculateDeadLineDate = () => {
+    // studyDate에서 10일 전까지 날짜중 현재 날짜보다 이후의 날짜에 모집 마감 날짜를 설정할 수 있도록 합니다.
+    const studyDate = new Date(study.studyDate);
+    const currentDate = new Date();
+
+    const deadLineDate = [];
+    for (let i = 1; i <= 10; i++) {
+      const date = new Date(studyDate.getTime() - 86400000 * i);
+      // 현재 날짜보다 24시간 이후의 날짜만 선택할 수 있도록 합니다.
+      if (date.getTime() > currentDate.getTime() + 86400000) {
+        deadLineDate.push(
+          <option key={i} value={date.getTime()}>
+            {date.toLocaleDateString()}
+          </option>,
+        );
+      }
+    }
+    return deadLineDate;
+  };
+
   return (
     <>
       {/* 모달창입니다. */}
@@ -256,7 +305,10 @@ const AddPage = () => {
       <BasicLayoutPage headerTitle="스터디추가">
         <form>
           <div className="StudyAddWrap">
-            <div className="StudyAddImg" style={{ backgroundImage: `url(${imgSrc})` }}>
+            <div
+              className="StudyAddImg"
+              style={{ backgroundImage: `url(${imgSrc})` }}
+            >
               <label htmlFor="fileInput">
                 추가
                 <input id="fileInput" type="file" onChange={handleFileChange} />
@@ -287,9 +339,21 @@ const AddPage = () => {
             </div>
             <div onClick={lat ? () => {} : handleAddressSearchClick}>
               <h3>주소</h3>
-              <input name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
+              <input
+                name="location"
+                type="text"
+                value={study.location}
+                placeholder="주소를 입력해주세요."
+                readOnly
+              />
 
-              <img className="AdressSearch" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} alt="searchIcon" />
+              <img
+                className="AdressSearch"
+                src={
+                  process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"
+                }
+                alt="searchIcon"
+              />
             </div>
             <div className="reWrap">
               <h3>참여날짜</h3>
@@ -301,12 +365,24 @@ const AddPage = () => {
                 placeholder="참여일을 입력해주세요."
                 onChange={handleChangeStudy}
                 min={new Date().toISOString().substring(0, 16)}
-                max={new Date(new Date().getTime() + 12096e5).toISOString().substring(0, 16)}
+                max={new Date(new Date().getTime() + 12096e5)
+                  .toISOString()
+                  .substring(0, 16)}
               />
             </div>
             <div>
+              <h3>모집 마감 날짜</h3>
+              {renderStudyDeadLineDate()}
+            </div>
+            <div>
               <h3>참여인원</h3>
-              <select id="maxPeople" name="maxPeople" value={study.maxPeople} onChange={handleChangeStudy} style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}>
+              <select
+                id="maxPeople"
+                name="maxPeople"
+                value={study.maxPeople}
+                onChange={handleChangeStudy}
+                style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+              >
                 {Array.from({ length: 9 }, (_, index) => (
                   <option key={index} value={index + 2}>
                     {index + 2}
@@ -316,7 +392,12 @@ const AddPage = () => {
             </div>
             <div>
               <h3>카테고리</h3>
-              <select id="category" name="category" value={study.category} onChange={handleChangeStudy}>
+              <select
+                id="category"
+                name="category"
+                value={study.category}
+                onChange={handleChangeStudy}
+              >
                 <option hidden>카테고리 선택</option>
                 {Object.entries(categories).length > 0 &&
                   Object.entries(categories).map(([key, value], index) => (

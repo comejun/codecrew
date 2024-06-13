@@ -124,7 +124,7 @@ public class Member {
     // 알림 리스트 변경
     public void addNotice(Study study, boolean isCreator, NoticeType noticeType) {
         this.noticeList.add(Notice.builder()
-                        .noticeId(this.noticeList.size() + 1L)
+                .noticeId(this.noticeList.size() + 1L)
                 .study(study)
                 .noticeType(noticeType)
                 .isCreator(isCreator)
@@ -136,4 +136,9 @@ public class Member {
         return this.noticeList.size();
     }
 
+// 벌점 추가
+    public void addPenalty(int penalty) {
+        this.penalty += penalty;
+
+    }
 }

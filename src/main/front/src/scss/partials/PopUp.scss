@@ -1,0 +1,44 @@
+div.newPopupWrap{
+  width: 100vw;
+  max-width: 500px;
+  height: 100vh;
+  display: block;
+  top: 0;
+  margin: 0 auto;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 9999999;
+  position: fixed;
+  text-align: center;
+}
+div.newPopupContent{
+  margin: 0 auto;
+  margin-top: 30vh;
+  width: calc(100% - 32px);
+  max-width: 380px;
+  min-height: 250px;
+  background-color: #fff;
+  border-radius: 12px;
+  display: block;
+  text-align: center;
+  h2{
+    padding-top: 60px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+  p{
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 32px;
+  }
+}
+div.newPopupBtnWrap{
+  width: calc(100% - 32px);
+  max-width: 320px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  button{
+    width:calc(50% - 10px);
+  }
+}

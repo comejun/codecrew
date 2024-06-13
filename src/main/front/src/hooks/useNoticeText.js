@@ -37,6 +37,10 @@ const UseNoticeText = (notice) => {
     else if (notice.noticeType === "STUDY_END") {
       return renderStudyEndNoticeText(notice);
     }
+    // 스터디 방치 알람
+    else if (notice.noticeType === "STUDY_DEAD") {
+      return renderStudyDeadNoticeText(notice);
+    }
     // 참가일 1일전 알람
     else if (notice.noticeType === "PRE_PARTICIPATION_DATE") {
       return renderPreParticipationDateNoticeText(notice);
@@ -44,10 +48,6 @@ const UseNoticeText = (notice) => {
     // 참가일 당일 알람
     else if (notice.noticeType === "PARTICIPATION_DATE") {
       return renderParticipationDateNoticeText(notice);
-    }
-    // 장소 도착 알람
-    else if (notice.noticeType === "LOCATION_ARRIVAL") {
-      return renderLocationArrivalNoticeText(notice);
     }
     // 출석 완료 알람
     else if (notice.noticeType === "ATTENDANCE_COMPLETE") {
@@ -65,7 +65,17 @@ const UseNoticeText = (notice) => {
     else if (notice.noticeType === "BLACK_USER") {
       return renderBlackUserNoticeText(notice);
     }
+    // 벌점 알람
+    else if (notice.noticeType === "PENALTY") {
+      return renderPenaltyNoticeText(notice);
+    }
+    // 벌점 삭제 알람
+    else if (notice.noticeType === "PENALTY_DELETE") {
+      return renderPenaltyDeleteNoticeText(notice);
+    }
   };
+
+  // *************** 알람 텍스트 함수 ***************
 
   // 스터디 삭제 알람 텍스트
   const renderStudyDeleteNoticeText = (notice) => {
@@ -111,6 +121,11 @@ const UseNoticeText = (notice) => {
     return <h3>{notice.studyTitle}가 종료 되었습니다.</h3>;
   };
 
+  // 스터디 방치 알람 텍스트
+  const renderStudyDeadNoticeText = (notice) => {
+    return <h3>{notice.studyTitle}가 취소 되었습니다.</h3>;
+  };
+
   // 참가일 1일전 알람 텍스트
   const renderPreParticipationDateNoticeText = (notice) => {
     return <h3>{notice.studyTitle} 참가일이 1일 남았습니다.</h3>;
@@ -119,11 +134,6 @@ const UseNoticeText = (notice) => {
   // 참가일 당일 알람 텍스트
   const renderParticipationDateNoticeText = (notice) => {
     return <h3>{notice.studyTitle} 참가일이 오늘 입니다.</h3>;
-  };
-
-  // 장소 도착 알람 텍스트
-  const renderLocationArrivalNoticeText = (notice) => {
-    return <h3>{notice.studyTitle} 장소에 도착 하였습니다.</h3>;
   };
 
   // 출석 완료 알람 텍스트
@@ -143,8 +153,17 @@ const UseNoticeText = (notice) => {
 
   // 회원 정지 알람 텍스트
   const renderBlackUserNoticeText = (notice) => {
-    // TODO: 회원 정지 알람 텍스트 수정
-    return <h3>회원님은 정지 되었습니다.</h3>;
+    return <h3>회원님의 활동이 3일 동안 정지 되었습니다.</h3>;
+  };
+
+  // 벌점 알람 텍스트
+  const renderPenaltyNoticeText = (notice) => {
+    return <h3>규칙 위반 으로 인해 벌점이 추가 되었습니다.</h3>;
+  };
+
+  // 벌점 삭제 알람 텍스트
+  const renderPenaltyDeleteNoticeText = (notice) => {
+    return <h3>회원님의 활동 정지가 해제되었습니다.</h3>;
   };
 
   return noticeTypeCheck(notice);

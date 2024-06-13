@@ -11,7 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class StudyDTO {
     private int maxPeople;
     private boolean disabled;
     private boolean isConfirmed;
+    private boolean isFinished;
     private Category category;
     // 스터디 참여자 목록
     private List<StudyMember> studyMemberList;
@@ -49,6 +52,16 @@ public class StudyDTO {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         this.studyDate = LocalDateTime.parse(strStudyDate, formatter);
     }
+
+    public void changeStudyDeadlineDate(Long strStudyDeadlineDate) {
+        if (strStudyDeadlineDate == null) {
+            return;
+        }
+        Instant instant = Instant.ofEpochMilli(strStudyDeadlineDate);
+        this.studyDeadlineDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+
+    }
+
     public void changeStudyDateWithOutT(String strStudyDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         this.studyDate = LocalDateTime.parse(strStudyDate, formatter);

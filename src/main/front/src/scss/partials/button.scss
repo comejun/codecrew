@@ -72,6 +72,21 @@ button.btnMediumPoint:hover{
   background-color: #007BFF;
 }
 
+button.btnMediumPointLine{
+  background-color: #fff;
+  border: 1.5px solid #007BFF;
+  font-size:14px;
+  height:44px;
+  line-height: 44px;
+  border-radius: 12px;
+  color:#000;
+}
+button.btnMediumPointLine:hover{
+  background-color: #007BFF;
+  border:1px solid #007BFF;
+  color:#fff;
+}
+
 button.btnMediumBlack{
   background-color: #292C33;
   font-size:12px;

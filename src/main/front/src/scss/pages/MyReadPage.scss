@@ -26,7 +26,7 @@ div.MyBlockWrap{
     background-size: cover;
   }
   div.MyReadTitle{
-    width: calc(100% - 198px);
+    width: calc(100% - 200px);
     text-align: left;
     margin-top: 8px;
     h3{
@@ -39,7 +39,7 @@ div.MyBlockWrap{
     }
   }
   div.MyReadBtn{
-    width:80px;
+    width:90px;
     margin-top:8px;
     text-align: right;
     margin-right: 16px;
@@ -176,4 +176,15 @@ div.myFooter{
     font-size: 11px;
     color:#dcdcdc;
   }
+}
+div.endPageWrap{
+  width: 100vw;
+  max-width: 500px;
+  height: 100vh;
+  display: block;
+  top: 0;
+  margin: 0 auto;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 9999999;
+  position: relative;
 }

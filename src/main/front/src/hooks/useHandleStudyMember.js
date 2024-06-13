@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import jwtAxios from "../util/jwtUtil";
 import { API_SERVER_HOST } from "../api/memberAPI";
 import useCustomMove from "../hooks/useCustomMove";
+// import useCustomMap from "../hooks/useCustomMap";
 
 // 스터디 멤버 관련 훅
 const useHandleStudyMember = () => {
@@ -11,7 +12,7 @@ const useHandleStudyMember = () => {
   const host = API_SERVER_HOST;
   // 페이지 이동을 위한 함수들
   const { moveToLogin } = useCustomMove();
-
+  // const { myLocation } = useCustomMap();
   // 공통 로직: 사용자가 로그인 상태인지 확인하고, confirm 팝업을 통해 사용자의 확인을 받는 함수
   const confirmAction = async (message, action) => {
     // 사용자가 로그인 상태인지 확인

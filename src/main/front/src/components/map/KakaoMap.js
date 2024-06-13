@@ -5,13 +5,25 @@ import useCustomMap from "../../hooks/useCustomMap";
 
 const { kakao } = window;
 
-const KakaoMap = ({ overlayState, changeOverlayState, changePopup, refresh }) => {
+const KakaoMap = ({
+  overlayState,
+  changeOverlayState,
+  changePopup,
+  refresh,
+}) => {
   // 셀렉터로 카테고리 가져오기
   const categoryFilter = useSelector((state) => state.categorySlice.category);
-  const studyLocationList = useSelector((state) => state.categorySlice.studyLocationList);
+  const studyLocationList = useSelector(
+    (state) => state.categorySlice.studyLocationList,
+  );
   const dispatch = useDispatch();
 
-  const { myLocation, myLocationMarker, clustererMarkers, createMapClickMarker } = useCustomMap();
+  const {
+    myLocation,
+    myLocationMarker,
+    clustererMarkers,
+    createMapClickMarker,
+  } = useCustomMap();
 
   const [nowMarker, setNowMarker] = useState(null);
   const [mapClickMarker, setMapClickMarker] = useState(null);
@@ -45,7 +57,11 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup, refresh }) =>
       console.log("height : ", height);
       map.setDraggable(false);
       map.setZoomable(false);
-      changeOverlayState(mouseEvent.latLng.getLat(), mouseEvent.latLng.getLng(), true);
+      changeOverlayState(
+        mouseEvent.latLng.getLat(),
+        mouseEvent.latLng.getLng(),
+        true,
+      );
       kakao.maps.event.removeListener(map, "dblclick", mapClickedFunc);
     }
   };
@@ -67,10 +83,17 @@ const KakaoMap = ({ overlayState, changeOverlayState, changePopup, refresh }) =>
   // 현재 위치 받아 오면 마커 생성
   useEffect(() => {
     if (myLocation.get) {
-      console.log("현위치 마커 state에 저장");
-      setNowMarker(myLocationMarker);
+      if (nowMarker === null) {
+        console.log("현위치 마커 state에 저장");
+        setNowMarker(myLocationMarker);
+      } else {
+        // 마커 위치 변경
+        nowMarker.setPosition(
+          new kakao.maps.LatLng(myLocation.lat, myLocation.lng),
+        );
+      }
     }
-  }, [myLocation.get]);
+  }, [myLocation]);
 
   // 카테고리 필터링데이터 가져오기
   useEffect(() => {

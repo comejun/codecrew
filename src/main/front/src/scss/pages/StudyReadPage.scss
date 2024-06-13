@@ -23,7 +23,7 @@ div.ReadImg{
   background-size: cover;
 }
 div.ReadTitle{
-  width: calc(100% - 198px);
+  width: calc(100% - 200px);
   text-align: left;
   margin-top: 8px;
   h3{
@@ -44,7 +44,7 @@ div.ReadTitle{
   }
 }
 div.ReadBtn{
-  width:80px;
+  width:90px;
   text-align: right;
   button{
     margin-top: 0px;
@@ -143,4 +143,16 @@ div.StudyJoinBtn{
           0 0px 6px rgba(0,0,0,0.1);
     margin-top: 32px;
   }
+}
+div.endPageWrap{
+  width: 100vw;
+  max-width: 500px;
+  height: calc(100vh - 52.5px);
+  display: block;
+  top: 52.5px;
+  margin: 0 auto;
+  background-color: rgba(255,255,255,0.4);
+  z-index: 9999999;
+  position: fixed;
+  text-align: center;
 }

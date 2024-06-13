@@ -38,16 +38,29 @@ const useHandleStudy = () => {
   const handleStart = useCallback(async (study) => {
     return confirmAction("정말로 시작하시겠습니까?", async () => {
       const updatedStudy = { ...study, isConfirmed: true };
-      const response = await jwtAxios.put(
-        `${API_SERVER_HOST}/api/study/${study.id}/start`,
-        updatedStudy,
-      );
+      const response = await jwtAxios.put(`${API_SERVER_HOST}/api/study/${study.id}/start`, updatedStudy);
       if (response.status === 200) {
         alert("스터디가 시작되었습니다.");
         return "SUCCESS";
       } else {
         console.error("스터디 시작에 실패했습니다.");
         alert("스터디 시작에 실패했습니다.");
+        return "FAILURE";
+      }
+    });
+  }, []);
+
+  // 스터디 종료 처리 함수
+  const handleFinish = useCallback(async (study) => {
+    return confirmAction("정말로 종료하시겠습니까?", async () => {
+      const updatedStudy = { ...study, isFinished: true };
+      const response = await jwtAxios.put(`${API_SERVER_HOST}/api/study/${study.id}/finish`, updatedStudy);
+      if (response.status === 200) {
+        alert("스터디가 종료되었습니다.");
+        return "SUCCESS";
+      } else {
+        console.error("스터디 종료에 실패했습니다.");
+        alert("스터디 종료에 실패했습니다.");
         return "FAILURE";
       }
     });
@@ -70,7 +83,7 @@ const useHandleStudy = () => {
   };
 
   // 각 함수를 반환
-  return { handleStart, handleDelete };
+  return { handleStart, handleDelete, handleFinish };
 };
 
 export default useHandleStudy;

@@ -64,13 +64,11 @@ public class MemberServiceImpl implements MemberService {
     public DataMemberDTO getMember(String email) {
         Member findMember = memberRepository.getMemberWithFavoriteList(email);
         // Member Entity -> DataMemberDTO
-        DataMemberDTO dataMemberDTO = modelMapper.map(findMember, DataMemberDTO.class);
-        return dataMemberDTO;
+        return modelMapper.map(findMember, DataMemberDTO.class);
     }
 
     public Member getMemberEntity(String email) {
-        Member findMember = memberRepository.getMemberWithFavoriteList(email);
-        return findMember;
+        return memberRepository.getMemberWithFavoriteList(email);
     }
 
     @Override
@@ -91,8 +89,7 @@ public class MemberServiceImpl implements MemberService {
     public DataMemberDTO findMemberByPhone(String phone) {
         Member findMember = memberRepository.findMemberByPhone(phone);
         if (findMember != null) {
-            DataMemberDTO dataMemberDTO = modelMapper.map(findMember, DataMemberDTO.class);
-            return dataMemberDTO;
+            return modelMapper.map(findMember, DataMemberDTO.class);
         }
         return null;
     }
@@ -136,14 +133,13 @@ public class MemberServiceImpl implements MemberService {
         }
 
 //        String nickname = "SocialMember";
-        Member member = Member.builder()
+        return Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(tmpPassword))
                 .nickname(nickname)
                 .profileImg(profile)
                 .isNew(needChangeProfile)
                 .build();
-        return member;
     }
 
     // 임시비번 만들어주는 메서드
