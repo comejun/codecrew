@@ -2,6 +2,8 @@ package com.react.project2.controller;
 
 import com.react.project2.domain.MemberStatus;
 import com.react.project2.domain.NoticeType;
+import com.react.project2.dto.PageRequestDTO;
+import com.react.project2.dto.PageResponseDTO;
 import com.react.project2.dto.StudyDTO;
 import com.react.project2.service.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +21,28 @@ import java.util.Map;
 public class StudyController {
     private final StudyService studyService;
 
+    // 스터디 목록 조회
+    @GetMapping("/list/{email}")
+    public PageResponseDTO<StudyDTO> listMember(
+            PageRequestDTO pageRequestDTO,
+            @PathVariable("email") String memberEmail) {
+        log.info("******* StudyController - list/email : {}", memberEmail);
+        log.info("******* StudyController - list/email pageRequestDTO : {}", pageRequestDTO);
+        // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
+        return studyService.getListMember(pageRequestDTO, memberEmail);
+    }
     // 스터디 등록
     @PostMapping("/")
     public Map<String, String> add(StudyDTO studyDTO){
         log.info("**** StudyController POST / add {} ****", studyDTO);
         studyService.add(studyDTO);
         return Map.of("RESULT", "SUCCESS");
+    }
+
+    // 스터디 전부 조회
+    @GetMapping("/list")
+    public PageResponseDTO<StudyDTO> list(PageRequestDTO pageRequestDTO){
+        return studyService.getList(pageRequestDTO);
     }
 
     // 스터디 조회

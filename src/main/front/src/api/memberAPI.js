@@ -35,3 +35,12 @@ export const modifyMember = async (member) => {
   const response = await axios.put(`${host}/modify`, member);
   return response.data;
 };
+
+export const disableMember = async (email) => {
+  try {
+    const response = await axios.put(`${host}/api/member/${email}/disable`);
+    return response.data;
+  } catch (error) {
+    console.error("회원 탈퇴에 실패했습니다.", error);
+  }
+};

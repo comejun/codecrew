@@ -44,4 +44,7 @@ public interface MemberService {
     // 회원 알림 갯수 조회
     int getNoticeCount(String email);
 
+    // 회원 탈퇴
+    public Member disableMember(String email);
+
 }

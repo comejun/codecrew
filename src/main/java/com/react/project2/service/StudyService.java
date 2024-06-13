@@ -18,6 +18,12 @@ public interface StudyService {
     // 스터디 등록
     void add(StudyDTO studyDTO);
 
+    // 스터디 조회(목록)
+    PageResponseDTO<StudyDTO> getList(PageRequestDTO pageRequestDTO);
+
+    // 스터디 조회(이메일/목록)
+    PageResponseDTO<StudyDTO> getListMember(PageRequestDTO pageRequestDTO, String memberEmail);
+
     // 스터디 조회(1개)
     StudyDTO get(Long id);
 

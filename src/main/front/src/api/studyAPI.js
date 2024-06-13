@@ -53,3 +53,11 @@ export const fetchMyStudyJoinCount = async (userEmail) => {
     return 0;
   }
 };
+// API 스터디 목록조회 요청
+export const getList = async (pageParam, email) => {
+  const { page, size } = pageParam;
+  const response = await jwtAxios.get(`${host}/list/${email}`, {
+    params: { page, size }, // 여기서 page와 size를 동적으로 설정
+  });
+  return response.data;
+};

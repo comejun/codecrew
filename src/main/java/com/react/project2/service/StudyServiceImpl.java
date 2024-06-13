@@ -37,6 +37,52 @@ public class StudyServiceImpl implements StudyService {
         Study saved = studyRepository.save(study);
     }
 
+    @Override
+    public PageResponseDTO<StudyDTO> getList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("id").descending());
+
+        Page<Object[]> result = studyRepository.selectList(pageable);
+
+        List<StudyDTO> list = result.getContent().stream().map(objArr -> {
+            Study study = (Study) objArr[0];
+            StudyDTO studyDTO = entityToDTO(study);
+            return studyDTO;
+        }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDTO.<StudyDTO>withList()
+                .list(list)
+                .totalCount(totalCount)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+    // 스터디 조회(이메일/목록)
+    @Override
+    public PageResponseDTO<StudyDTO> getListMember(PageRequestDTO pageRequestDTO, String memberEmail) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("id").descending());
+
+        Page<Study> page = studyRepository.findAllByMemberEmail(memberEmail, pageable);
+
+        List<StudyDTO> dtos = page.getContent().stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponseDTO.<StudyDTO>withListHasMore()
+                .list(dtos)
+                .totalCount(page.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .hasMoreList(page.hasNext())
+                .build();
+    }
+
+
     // 스터디 조회
     @Override
     public StudyDTO get(Long id) {

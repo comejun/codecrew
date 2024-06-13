@@ -5,7 +5,7 @@ import useCustomMove from "../../hooks/useCustomMove";
 import { useSelector } from "react-redux";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import useMemberProfile from "../../hooks/useMemberProfile";
-import { API_SERVER_HOST } from "../../api/memberAPI";
+import { API_SERVER_HOST, disableMember } from "../../api/memberAPI";
 import useCategories from "../../hooks/useCategories";
 import React, { useEffect, useState } from "react";
 import { fetchMyStudyCount, fetchMyStudyJoinCount } from "../../api/studyAPI";
@@ -50,6 +50,17 @@ const ReadPage = () => {
     moveToPath("/");
   };
 
+  const handleClickDisabled = async () => {
+    const response = await disableMember(userEmail);
+    if (response.status === 200) {
+      console.log("Member disabled successfully:", response.data);
+      execLogout();
+      moveToPath("/");
+      alert("회원 탈퇴가 완료되었습니다.");
+    } else {
+      console.error("Failed to disable member:", response);
+    }
+  };
   return (
     <BasicLayoutPage headerTitle="마이페이지">
       <div>
@@ -139,10 +150,10 @@ const ReadPage = () => {
             <span></span>
           </Link>
         </div>
-        <div className="MenuWrap">
+        <div onClick={handleClickDisabled} className="MenuWrap">
           <Link>
             <h3>🗑️ 회원탈퇴</h3>
-            <span></span>
+            <span>(고객정보가 모두 삭제됩니다.)</span>
           </Link>
         </div>
       </div>

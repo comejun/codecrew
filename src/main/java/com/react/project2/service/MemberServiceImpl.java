@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
@@ -213,5 +214,15 @@ public class MemberServiceImpl implements MemberService {
 
         return kakaoAccount;
     }
+
+    // 회원 탈퇴
+    public Member disableMember(String email) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        member.changeDisabled(true);
+        member.changeDisabledDate();
+        return memberRepository.save(member);
+    }
+
 
 }

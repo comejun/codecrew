@@ -30,6 +30,4 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     // 회원 이메일
     Optional<Member> findByEmail(String email);
-
-    //
 }
