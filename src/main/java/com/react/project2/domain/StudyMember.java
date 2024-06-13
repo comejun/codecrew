@@ -1,8 +1,6 @@
 package com.react.project2.domain;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +26,10 @@ public class StudyMember {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private MemberStatus status = MemberStatus.HOLD;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
 
 
     @Override

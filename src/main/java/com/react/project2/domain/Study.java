@@ -69,7 +69,7 @@ public class Study {
     private Category category;
 
     // 스터디 참여자 목록
-    @ElementCollection
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<StudyMember> studyMemberList = new ArrayList<>();
 
@@ -92,7 +92,7 @@ public class Study {
     public void changeLocationY(double locationY) {
         this.locationY = locationY;
     }
-public void changeStudyDate(LocalDateTime studyDate) {
+    public void changeStudyDate(LocalDateTime studyDate) {
         this.studyDate = studyDate;
     }
     public void changeStudyDeadlineDate(LocalDateTime studyDeadlineDate) {

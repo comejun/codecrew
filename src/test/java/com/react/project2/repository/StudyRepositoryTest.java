@@ -57,7 +57,7 @@ class StudyRepositoryTest {
 
     @Test
     public void testInsert() {
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 20; i++) {
 
             // 37.57163048751097, 126.9768859784546
 
@@ -83,7 +83,7 @@ class StudyRepositoryTest {
                     .studyDeadlineDate(studyDeadlineDate)
                     .locationX(locationX)
                     .locationY(locationY)
-                    .member(memberRepository.findByEmail("comejun@naver.com").get())
+                    .member(memberRepository.findByEmail("user0@test.com").get())
                     .studyDate(studyDate)
                     .maxPeople(10)
                     .category(category)

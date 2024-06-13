@@ -2,6 +2,7 @@ package com.react.project2.controller;
 
 import com.react.project2.domain.MemberStatus;
 import com.react.project2.domain.NoticeType;
+import com.react.project2.domain.StudyMember;
 import com.react.project2.dto.PageRequestDTO;
 import com.react.project2.dto.PageResponseDTO;
 import com.react.project2.dto.StudyDTO;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,7 +23,7 @@ import java.util.Map;
 public class StudyController {
     private final StudyService studyService;
 
-    // 스터디 목록 조회
+    // 주최스터디 목록 조회
     @GetMapping("/list/{email}")
     public PageResponseDTO<StudyDTO> listMember(
             PageRequestDTO pageRequestDTO,
@@ -31,6 +33,15 @@ public class StudyController {
         // 리턴 : 목록 데이터, 다음데이터있는지 여부 boolean,
         return studyService.getListMember(pageRequestDTO, memberEmail);
     }
+
+    // 참가스터디 목록 조회
+    @GetMapping("/memberList/{email}")
+    public PageResponseDTO<StudyDTO> getJoinStudy(
+            PageRequestDTO pageRequestDTO,
+            @PathVariable("email") String email) {
+        return studyService.getJoinStudy(pageRequestDTO, email);
+    }
+
     // 스터디 등록
     @PostMapping("/")
     public Map<String, String> add(StudyDTO studyDTO){

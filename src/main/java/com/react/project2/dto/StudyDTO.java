@@ -61,6 +61,7 @@ public class StudyDTO {
                 .title(study.getTitle())
                 .content(study.getContent())
                 .memberEmail(study.getMember().getEmail()) // 조회된 Member 엔티티를 사용합니다.
+                .studyMemberList(study.getStudyMemberList()) // 참가자 목록
                 .memberNickname(study.getMember().getNickname()) // 조회된 Member 엔티티를 사용합니다.
                 .memberPhone(study.getMember().getPhone()) // 조회된 Member 엔티티를 사용합니다.
                 .location(study.getLocation())

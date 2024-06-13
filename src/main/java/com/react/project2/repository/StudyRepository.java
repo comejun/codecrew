@@ -1,7 +1,9 @@
 package com.react.project2.repository;
 
 import com.react.project2.domain.Category;
+import com.react.project2.domain.MemberStatus;
 import com.react.project2.domain.Study;
+import com.react.project2.domain.StudyMember;
 import jakarta.persistence.Entity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +29,6 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     List<Study> findAllCategory();
 
 
-
-
-
     // 스터디 조회
 //    @EntityGraph(attributePaths =  = {"studyList"}) // 조인
     @Query("select s from Study s where s.id = :id")
@@ -38,6 +37,13 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     // 스터디 목록 조회
     @Query("select s from Study s where s.disabled=false")
     Page<Object[]> selectList(Pageable pageable);
+
+    // 참가 스터디 목록
+    @Query("SELECT s FROM Study s JOIN s.studyMemberList members WHERE members.email = :email and members.status in ('HOLD', 'ACCEPT') and s.disabled = false")
+    List<Study> findJoinStudy(@Param("email") String email);
+//    @Query("SELECT s FROM Study s JOIN s.studyMemberList sm WHERE sm.email = :email AND sm.status NOT IN (:excludedStatuses)")
+//    Page<Study> findByStudyMemberEmailAndStatusNotIn(@Param("email") String email, @Param("excludedStatuses") List<MemberStatus> excludedStatuses, Pageable pageable);
+
 
     // 스터디 만든이 기준으로 스터디 목록 조회
     Page<Study> findAllByMemberEmail(String memberEmail, Pageable pageable);
@@ -54,6 +60,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     // disabled가 false인 스터디 studyMemberList에 status가 HOLD 또는 ACCEPT인 스터디 갯수 조회
     @Query("SELECT COUNT(s) FROM Study s JOIN s.studyMemberList members WHERE members.email = :email and members.status in ('HOLD', 'ACCEPT') and s.disabled = false")
     int countJoinStudy(@Param("email") String email);
+
 
 
 }

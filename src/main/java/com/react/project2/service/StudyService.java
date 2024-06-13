@@ -4,6 +4,7 @@ package com.react.project2.service;
 import com.react.project2.domain.MemberStatus;
 import com.react.project2.domain.NoticeType;
 import com.react.project2.domain.Study;
+import com.react.project2.domain.StudyMember;
 import com.react.project2.dto.PageRequestDTO;
 import com.react.project2.dto.PageResponseDTO;
 import com.react.project2.dto.StudyDTO;
@@ -21,8 +22,10 @@ public interface StudyService {
     // 스터디 조회(목록)
     PageResponseDTO<StudyDTO> getList(PageRequestDTO pageRequestDTO);
 
-    // 스터디 조회(이메일/목록)
+    // 주최스터디 조회(이메일/목록)
     PageResponseDTO<StudyDTO> getListMember(PageRequestDTO pageRequestDTO, String memberEmail);
+    // 참가스터디 조회
+    PageResponseDTO<StudyDTO> getJoinStudy(PageRequestDTO pageRequestDTO, String email);
 
     // 스터디 조회(1개)
     StudyDTO get(Long id);

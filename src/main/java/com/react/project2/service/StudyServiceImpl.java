@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class StudyServiceImpl implements StudyService {
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
-    // 스터디 조회(이메일/목록)
+    // 주최스터디 조회(이메일/목록)
     @Override
     public PageResponseDTO<StudyDTO> getListMember(PageRequestDTO pageRequestDTO, String memberEmail) {
         Pageable pageable = PageRequest.of(
@@ -81,6 +82,31 @@ public class StudyServiceImpl implements StudyService {
                 .hasMoreList(page.hasNext())
                 .build();
     }
+
+    // 참가스터디 조회
+    @Override
+    public PageResponseDTO<StudyDTO> getJoinStudy(PageRequestDTO pageRequestDTO, String email) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("id").descending());
+
+        List<MemberStatus> excludedStatuses = Arrays.asList(MemberStatus.DECLINE, MemberStatus.WITHDRAW);
+
+        Page<Study> page = studyRepository.findJoinStudy(email, excludedStatuses, pageable);
+
+        List<StudyDTO> dtos = page.getContent().stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponseDTO.<StudyDTO>withListHasMore()
+                .list(dtos)
+                .totalCount(page.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .hasMoreList(page.hasNext())
+                .build();
+    }
+
 
 
     // 스터디 조회
@@ -230,10 +256,11 @@ public class StudyServiceImpl implements StudyService {
                 .memberNickname(study.getMember().getNickname()) // 조회된 Member 엔티티를 사용합니다.
                 .memberPhone(study.getMember().getPhone()) // 조회된 Member 엔티티를 사용합니다.
                 .location(study.getLocation())
-                .studyDeadlineDate(study.getStudyDate())
+                .studyDeadlineDate(study.getStudyDeadlineDate())
                 .locationX((Double) study.getLocationX())
                 .locationY((Double) study.getLocationY())
                 .studyDate(study.getStudyDate())
+                .createDate(study.getCreateDate())
                 .maxPeople(study.getMaxPeople())
                 .isConfirmed(study.getIsConfirmed())
                 .category(study.getCategory())
