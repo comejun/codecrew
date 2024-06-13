@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -69,7 +70,7 @@ public class Study {
     private Category category;
 
     // 스터디 참여자 목록
-    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
     @Builder.Default
     private List<StudyMember> studyMemberList = new ArrayList<>();
 

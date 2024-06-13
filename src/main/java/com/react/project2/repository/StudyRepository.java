@@ -38,12 +38,9 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @Query("select s from Study s where s.disabled=false")
     Page<Object[]> selectList(Pageable pageable);
 
-    // 참가 스터디 목록
-    @Query("SELECT s FROM Study s JOIN s.studyMemberList members WHERE members.email = :email and members.status in ('HOLD', 'ACCEPT') and s.disabled = false")
-    List<Study> findJoinStudy(@Param("email") String email);
-//    @Query("SELECT s FROM Study s JOIN s.studyMemberList sm WHERE sm.email = :email AND sm.status NOT IN (:excludedStatuses)")
-//    Page<Study> findByStudyMemberEmailAndStatusNotIn(@Param("email") String email, @Param("excludedStatuses") List<MemberStatus> excludedStatuses, Pageable pageable);
-
+   // 회원이 studyMemberList에 status가 ACCEPT 또는 HOLD인 스터디 목록 페이지네이션 조회
+    @Query("select s from Study s join s.studyMemberList m where m.email = :email and m.status in ('ACCEPT', 'HOLD') and s.disabled = false")
+    Page<Study> findAllByMemberEmailAndStatus(@Param("email") String email, Pageable pageable);
 
     // 스터디 만든이 기준으로 스터디 목록 조회
     Page<Study> findAllByMemberEmail(String memberEmail, Pageable pageable);

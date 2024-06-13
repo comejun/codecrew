@@ -91,9 +91,8 @@ public class StudyServiceImpl implements StudyService {
                 pageRequestDTO.getSize(),
                 Sort.by("id").descending());
 
-        List<MemberStatus> excludedStatuses = Arrays.asList(MemberStatus.DECLINE, MemberStatus.WITHDRAW);
 
-        Page<Study> page = studyRepository.findJoinStudy(email, excludedStatuses, pageable);
+        Page<Study> page = studyRepository.findAllByMemberEmailAndStatus(email, pageable);
 
         List<StudyDTO> dtos = page.getContent().stream()
                 .map(this::entityToDTO)
