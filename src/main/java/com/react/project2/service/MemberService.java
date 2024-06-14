@@ -45,4 +45,6 @@ public interface MemberService {
     // 회원 탈퇴
     public Member disableMember(String email);
 
+    // 정지 기간 지난 회원 찾기
+    void checkBlockDate();
 }

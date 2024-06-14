@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
@@ -26,6 +27,10 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Member getMemberWithNoticeListAndFavoriteList(@Param("email") String email);
 
     Member findMemberByPhone(String phone);
+
+    // 현재 시간보다 블록날짜가 지난 회원 찾기
+    @Query("select m from Member m where m.blockedDate < current_timestamp")
+    List<Member> findMemberByAfterBlockedDate();
 
 
     // 회원 이메일

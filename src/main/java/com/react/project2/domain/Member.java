@@ -107,6 +107,16 @@ public class Member {
         this.introduction = introduction;
     }
 
+    // 정지 날짜 설정
+    public void changeBlockedDate(boolean blocked){
+        if(blocked){
+            // 현재 시간 + 72시간
+            this.blockedDate = LocalDateTime.now().plusHours(72);
+        }else{
+            this.blockedDate = null;
+        }
+    }
+
     // 탈퇴 여부 수정
     public void changeDisabled(boolean disabled) {
         this.disabled = disabled;
@@ -131,14 +141,20 @@ public class Member {
                 .build());
     }
 
+    // 알람 갯수 조회
     public int getNoticeCount() {
         // ***** 알림 갯수 조회 *****
         return this.noticeList.size();
     }
 
-// 벌점 추가
+
+
+    // 벌점 추가
     public void addPenalty(int penalty) {
         this.penalty += penalty;
-
+    }
+    // 벌점 초기화
+    public void resetPenalty() {
+        this.penalty = 0;
     }
 }

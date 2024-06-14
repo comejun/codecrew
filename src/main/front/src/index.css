@@ -13,6 +13,9 @@ body{
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: none;
 }
+div#root{
+  background-color: #f8f8f8;
+}
 
 ::-webkit-scrollbar {
   display: none;

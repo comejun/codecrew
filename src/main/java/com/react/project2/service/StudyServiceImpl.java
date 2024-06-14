@@ -135,9 +135,6 @@ public class StudyServiceImpl implements StudyService {
         study.changeLocation(studyDTO.getLocation());
         study.changeLocationX(studyDTO.getLocationX());
         study.changeLocationY(studyDTO.getLocationY());
-        studyDTO.changeStudyDateWithOutT(studyDTO.getStrStudyDate());
-        //TODO 데드라인 날짜 추가
-        study.changeStudyDate(studyDTO.getStudyDate());
         study.changeMaxPeople(studyDTO.getMaxPeople());
         study.changeCategory(studyDTO.getCategory());
 
@@ -243,6 +240,11 @@ public class StudyServiceImpl implements StudyService {
             // 생성자에게 벌점 부여
             study.getMember().addPenalty(4);
             noticeService.createNotice(study.getId(), "", true, NoticeType.PENALTY);
+            // 생성자의 벌점 확인
+            if(study.getMember().getPenalty() >= 5){
+                study.getMember().changeBlockedDate(true);
+            }
+
             log.info("study.getMember().getPenalty() : " + study.getMember().getPenalty());
             // 스터디 삭제
             delete(study.getId());

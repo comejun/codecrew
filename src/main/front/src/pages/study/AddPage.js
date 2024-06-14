@@ -235,19 +235,13 @@ const AddPage = () => {
   const renderStudyDeadLineDate = () => {
     if (study.studyDate === "") {
       return (
-        <select disabled>
+        <select id="studyDeadLineDateDisabled" disabled>
           <option>참여날짜를 먼저 입력해주세요.</option>
         </select>
       );
     } else {
       return (
-        <select
-          id="studyDeadLineDate"
-          name="studyDeadLineDate"
-          value={study.studyDeadLineDate}
-          onChange={handleChangeStudy}
-          style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-        >
+        <select id="studyDeadLineDate" name="studyDeadLineDate" value={study.studyDeadLineDate} onChange={handleChangeStudy} style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}>
           {calculateDeadLineDate()}
         </select>
       );
@@ -267,7 +261,7 @@ const AddPage = () => {
         deadLineDate.push(
           <option key={i} value={date.getTime()}>
             {date.toLocaleDateString()}
-          </option>,
+          </option>
         );
       }
     }
@@ -305,10 +299,7 @@ const AddPage = () => {
       <BasicLayoutPage headerTitle="스터디추가">
         <form>
           <div className="StudyAddWrap">
-            <div
-              className="StudyAddImg"
-              style={{ backgroundImage: `url(${imgSrc})` }}
-            >
+            <div className="StudyAddImg" style={{ backgroundImage: `url(${imgSrc})` }}>
               <label htmlFor="fileInput">
                 추가
                 <input id="fileInput" type="file" onChange={handleFileChange} />
@@ -339,21 +330,9 @@ const AddPage = () => {
             </div>
             <div onClick={lat ? () => {} : handleAddressSearchClick}>
               <h3>주소</h3>
-              <input
-                name="location"
-                type="text"
-                value={study.location}
-                placeholder="주소를 입력해주세요."
-                readOnly
-              />
+              <input name="location" type="text" value={study.location} placeholder="주소를 입력해주세요." readOnly />
 
-              <img
-                className="AdressSearch"
-                src={
-                  process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"
-                }
-                alt="searchIcon"
-              />
+              <img className="AdressSearch" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_serch_gr.svg"} alt="searchIcon" />
             </div>
             <div className="reWrap">
               <h3>참여날짜</h3>
@@ -365,9 +344,7 @@ const AddPage = () => {
                 placeholder="참여일을 입력해주세요."
                 onChange={handleChangeStudy}
                 min={new Date().toISOString().substring(0, 16)}
-                max={new Date(new Date().getTime() + 12096e5)
-                  .toISOString()
-                  .substring(0, 16)}
+                max={new Date(new Date().getTime() + 12096e5).toISOString().substring(0, 16)}
               />
             </div>
             <div>
@@ -376,13 +353,7 @@ const AddPage = () => {
             </div>
             <div>
               <h3>참여인원</h3>
-              <select
-                id="maxPeople"
-                name="maxPeople"
-                value={study.maxPeople}
-                onChange={handleChangeStudy}
-                style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-              >
+              <select id="maxPeople" name="maxPeople" value={study.maxPeople} onChange={handleChangeStudy} style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}>
                 {Array.from({ length: 9 }, (_, index) => (
                   <option key={index} value={index + 2}>
                     {index + 2}
@@ -392,12 +363,7 @@ const AddPage = () => {
             </div>
             <div>
               <h3>카테고리</h3>
-              <select
-                id="category"
-                name="category"
-                value={study.category}
-                onChange={handleChangeStudy}
-              >
+              <select id="category" name="category" value={study.category} onChange={handleChangeStudy}>
                 <option hidden>카테고리 선택</option>
                 {Object.entries(categories).length > 0 &&
                   Object.entries(categories).map(([key, value], index) => (

@@ -101,7 +101,7 @@ div.bottomBtnWrap{
   cursor: pointer; /* 마우스 커서를 포인터로 변경 */
 }
 
-#maxPeople, #category {
+#maxPeople, #category, #studyDeadLineDate, #studyDeadLineDateDisabled, #strStudyDeadlineDate{
   -webkit-appearance: none; /* 크롬, 사파리 */
   -moz-appearance: none;    /* 파이어폭스 */
   appearance: none;         /* 표준 */
@@ -114,7 +114,10 @@ div.bottomBtnWrap{
 
 /* IE11 및 Edge를 위한 대체 스타일 */
 #maxPeople::-ms-expand, 
-#category::-ms-expand{
+#category::-ms-expand,
+#studyDeadLineDate::-ms-expand,
+#studyDeadLineDateDisabled::-ms-expand,
+#strStudyDeadlineDate::-ms-expand{
   display: none;
 }
 // input[type="datetime-local"]::-webkit-calendar-picker-indicator {

@@ -100,6 +100,16 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getNoticeCount();
     }
 
+    // 정지 기간 지난 회원 찾기
+    @Override
+    public void checkBlockDate() {
+        memberRepository.findMemberByAfterBlockedDate().forEach(member -> {
+            member.changeBlockedDate(false);
+            member.resetPenalty();
+            memberRepository.save(member);
+        });
+    }
+
     // 소셜회원 정보로 Member Entity 생성
     private Member makeSocialMember(String email, String accessToken) {
         // 임시비번 만들어서 Member 엔티티 생성해 리턴

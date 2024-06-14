@@ -23,23 +23,13 @@ export default function CategoryFilter() {
     <div className="filterWrap">
       <div className="filterContainer">
         <ul>
-          <li
-            onClick={handleCategoryFilter}
-            data-value={"ALL"}
-            className={categoryFilter.category === "ALL" ? "activeFilter" : ""}
-          >
+          <li onClick={handleCategoryFilter} data-value={"ALL"} className={categoryFilter.category === "ALL" ? "activeFilter" : ""}>
             전체
           </li>
           {Object.entries(categories).length > 0 &&
             Object.entries(categories).map(([key, value], index) => (
               <React.Fragment key={index}>
-                <li
-                  onClick={handleCategoryFilter}
-                  data-value={key}
-                  className={
-                    categoryFilter.category === key ? "activeFilter" : ""
-                  }
-                >
+                <li onClick={handleCategoryFilter} data-value={key} className={categoryFilter.category === key ? "activeFilter" : ""}>
                   {value}
                 </li>
               </React.Fragment>
